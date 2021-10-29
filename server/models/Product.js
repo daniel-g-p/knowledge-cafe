@@ -6,15 +6,14 @@ export default class Product {
     this.tag = tag;
     this.price = price;
     this.description = description;
-    this.variations = variations.map((item) => {
-      return {
-        id: item.trim().replaceAll(" ", "-"),
-        label: item,
-        unitsSold: 0,
-      };
-    });
-    this.totalRevenue = 0;
-    this.unitsSold = 0;
+    this.variations = variations;
+    this.stats = {
+      revenue: 0,
+      unitsSold: 0,
+      variations: variations.map((item) => {
+        return { name: item, sold: 0 };
+      }),
+    };
   }
   async create() {
     const collection = getDatabase().collection("products");
