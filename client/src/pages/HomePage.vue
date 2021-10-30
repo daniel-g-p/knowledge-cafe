@@ -9,7 +9,7 @@
         button-type="link"
         :button-link="buttonLink"
       >
-        Startseite
+        Zur Karte
       </base-button>
     </div>
   </main>
