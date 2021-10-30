@@ -20,6 +20,14 @@ export default class Product {
     const collection = getDatabase().collection("products");
     return await collection.insertOne(this);
   }
+  static async getAll(keys = []) {
+    const collection = getDatabase().collection("products");
+    const options = { projection: {} };
+    for (let key of keys) {
+      options.projection[key] = 1;
+    }
+    return await collection.find({}, options).toArray();
+  }
   static async deleteAll() {
     const collection = getDatabase().collection("products");
     return await collection.deleteMany({});

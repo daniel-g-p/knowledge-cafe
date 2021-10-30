@@ -19,5 +19,20 @@ export default {
       state.shopItems = payload;
     },
   },
-  actions: {},
+  actions: {
+    fetchItems(context, payload) {
+      try {
+        fetch(`${process.env.VUE_APP_API}/shop`)
+          .then((res) => {
+            return res.json();
+          })
+          .then((res) => {
+            console.log(res);
+            return res;
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };

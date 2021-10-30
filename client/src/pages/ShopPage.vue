@@ -5,6 +5,19 @@
   </main>
 </template>
 
+<script>
+import { mapActions } from "vuex";
+
+export default {
+  methods: {
+    ...mapActions({ fetchItems: "shop/fetchItems" }),
+  },
+  mounted() {
+    this.fetchItems();
+  },
+};
+</script>
+
 <style lang="scss" scoped>
 @use "../styles/index.scss" as *;
 .shop {
