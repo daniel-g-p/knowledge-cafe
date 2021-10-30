@@ -11,6 +11,7 @@ export default class User {
       token: undefined,
       expires: undefined,
     };
+    this.timestamp = new Date();
   }
   async create() {
     const collection = getDatabase().collection("users");

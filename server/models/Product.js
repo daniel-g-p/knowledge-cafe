@@ -14,6 +14,7 @@ export default class Product {
         return { name: item, sold: 0 };
       }),
     };
+    this.timestamp = new Date();
   }
   async create() {
     const collection = getDatabase().collection("products");
