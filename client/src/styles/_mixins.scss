@@ -1,0 +1,44 @@
+@mixin css-reset() {
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+  }
+  body {
+    box-sizing: border-box;
+    min-height: 100vh;
+  }
+  a,
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: currentColor;
+    background: none;
+    outline: none;
+  }
+  ol,
+  ul {
+    list-style: none;
+  }
+}
+
+@mixin responsive($screen-size) {
+  @media (min-width: $screen-size) {
+    @content;
+  }
+}
+
+@mixin font-face($font-name, $file-name, $font-weight) {
+  @font-face {
+    font-family: $font-name;
+    src: url("./assets/fonts/#{$file-name}.woff2") format("woff2"),
+      url("./assets/fonts/#{$file-name}.woff") format("woff");
+    font-weight: $font-weight;
+    font-style: normal;
+    font-display: swap;
+  }
+}
