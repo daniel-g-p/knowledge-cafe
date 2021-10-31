@@ -40,9 +40,8 @@ export default {
   background-color: $color-white;
   color: $color-black;
   border-radius: 0.25rem;
-  max-width: 36rem;
-  margin: 0 auto;
   display: grid;
   gap: 0.75rem;
+  margin-top: 3rem;
 }
 </style>

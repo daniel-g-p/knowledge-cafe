@@ -2,14 +2,16 @@
   <transition name="checkout-">
     <section v-if="cartItems.length" class="checkout" :class="collapsedClass">
       <div class="checkout__content">
-        <shop-checkout-summary
-          :collapsed="checkoutCollapsed"
-          @toggle-checkout="toggleCheckout"
-        ></shop-checkout-summary>
-        <shop-checkout-items
-          :items="cartItems"
-          @remove-item="removeItem"
-        ></shop-checkout-items>
+        <div>
+          <shop-checkout-summary
+            :collapsed="checkoutCollapsed"
+            @toggle-checkout="toggleCheckout"
+          ></shop-checkout-summary>
+          <shop-checkout-items
+            :items="cartItems"
+            @remove-item="removeItem"
+          ></shop-checkout-items>
+        </div>
         <shop-checkout-form></shop-checkout-form>
       </div>
     </section>
@@ -77,7 +79,17 @@ export default {
   &__content {
     max-width: $screen-tablet-l;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 1rem 1rem;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
 </style>
