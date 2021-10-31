@@ -1,7 +1,7 @@
 import { getDatabase } from "../utilities/database.js";
 
 export default class Product {
-  constructor(name, tag, price, description, variations) {
+  constructor(name, tag, price, description, variations = []) {
     this.name = name;
     this.tag = tag;
     this.price = price;

@@ -9,16 +9,51 @@ import User from "./models/User.js";
 
 const chance = new Chance();
 
-const seedProducts = async (numberOfProducts) => {
+const productData = [
+  {
+    name: "Espresso",
+    tag: "esp",
+    price: 2,
+    description: "Lorem ipsum dolor sit amet",
+  },
+  {
+    name: "Double Espresso",
+    tag: "desp",
+    price: 2,
+    description: "Lorem ipsum dolor sit amet",
+  },
+  {
+    name: "Americano",
+    tag: "ame",
+    price: 2,
+    description: "Lorem ipsum dolor sit amet",
+  },
+  {
+    name: "Cappuccino",
+    tag: "cap",
+    price: 2,
+    description: "Lorem ipsum dolor sit amet",
+    variations: ["Vollmilch", "Hafermilch"],
+  },
+  {
+    name: "Latte Macchiato",
+    tag: "lam",
+    price: 2,
+    description: "Lorem ipsum dolor sit amet",
+    variations: ["Vollmilch", "Hafermilch"],
+  },
+];
+
+const seedProducts = async (productData) => {
   await Product.deleteAll();
   const products = [];
-  for (let i = 0; i < numberOfProducts; i++) {
+  for (let item of productData) {
     const product = new Product(
-      chance.word(),
-      chance.word({ length: 3 }),
-      chance.integer({ min: 1, max: 3 }),
-      chance.sentence(),
-      [chance.word(), chance.word(), chance.word()]
+      item.name,
+      item.tag,
+      item.price,
+      item.description,
+      item.variations
     );
     await product.create();
     products.push(product);
@@ -50,10 +85,11 @@ const seedOrders = async (products, events, ordersPerEvent) => {
       for (let j = 0; j < numberOfItems; j++) {
         const product =
           products[chance.integer({ min: 0, max: products.length - 1 })];
-        const variation =
-          product.variations[
-            chance.integer({ min: 0, max: product.variations.length - 1 })
-          ];
+        const variation = product.variations.length
+          ? product.variations[
+              chance.integer({ min: 0, max: product.variations.length - 1 })
+            ]
+          : undefined;
         const item = new OrderItem(
           product._id.toString(),
           chance.integer({ min: 1, max: 2 }),
@@ -106,7 +142,7 @@ const seedUsers = async (numberOfUsers) => {
 const seedDatabase = async () => {
   try {
     await connectToDatabase();
-    const products = await seedProducts(5);
+    const products = await seedProducts(productData);
     const events = await seedEvents(3);
     const orders = await seedOrders(products, events, 50);
     const users = await seedUsers(5);
