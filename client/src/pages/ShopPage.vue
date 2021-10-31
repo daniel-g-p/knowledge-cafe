@@ -7,28 +7,61 @@
         :id="item._id"
         :name="item.name"
         :price="item.price"
-        @select-product="selectProduct"
+        @select-product="toggleProduct"
       ></shop-item>
     </section>
+    <shop-item-modal
+      :open="activeId ? true : false"
+      :id="activeId"
+      :name="activeName"
+      :variations="activeVariations"
+      @close-modal="toggleProduct"
+    ></shop-item-modal>
   </main>
 </template>
 
 <script>
 import ShopItem from "../components/ShopItem.vue";
+import ShopItemModal from "../components/ShopItemModal.vue";
 
 export default {
   components: {
     ShopItem,
+    ShopItemModal,
+  },
+  data() {
+    return {
+      activeId: "",
+    };
   },
   computed: {
     shopItems() {
       return this.$store.getters["shop/shopItems"];
     },
+    activeName() {
+      if (this.activeId) {
+        const { name } = this.shopItems.find(
+          (item) => item._id === this.activeId
+        );
+        return name;
+      } else {
+        return "";
+      }
+    },
+    activeVariations() {
+      if (this.activeId) {
+        const { variations } = this.shopItems.find(
+          (item) => item._id === this.activeId
+        );
+        return variations;
+      } else {
+        return [];
+      }
+    },
   },
   methods: {
-    selectProduct(productId) {
-      const product = this.shopItems.find((item) => item._id === productId);
-      console.log(product);
+    toggleProduct(productId) {
+      this.activeId = productId || "";
     },
   },
   mounted() {
