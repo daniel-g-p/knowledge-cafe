@@ -17,7 +17,7 @@
       :variations="activeVariations"
       @close-modal="toggleProduct"
     ></shop-item-modal>
-    <shop-checkout></shop-checkout>
+    <shop-checkout @toggle-checkout="toggleProduct"></shop-checkout>
   </main>
 </template>
 
