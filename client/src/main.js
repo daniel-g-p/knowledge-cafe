@@ -9,6 +9,7 @@ import BaseButton from "./base/BaseButton.vue";
 import BaseTitle from "./base/BaseTitle.vue";
 import BaseCard from "./base/BaseCard.vue";
 import BaseModal from "./base/BaseModal.vue";
+import BaseSelect from "./base/BaseSelect.vue";
 
 const app = createApp(App);
 
@@ -20,5 +21,6 @@ app.component("BaseButton", BaseButton);
 app.component("BaseTitle", BaseTitle);
 app.component("BaseCard", BaseCard);
 app.component("BaseModal", BaseModal);
+app.component("BaseSelect", BaseSelect);
 
 app.mount("#app");
