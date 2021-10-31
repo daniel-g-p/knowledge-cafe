@@ -67,14 +67,15 @@ export default {
       if (!this.variation && this.selectOptions.length) {
         this.selectError = true;
       } else {
-        const selection = this.selectOptions.find((item) => {
+        const variation = this.selectOptions.find((item) => {
           return item.id === this.variation;
         });
-        console.log(
-          `${this.quantity} x ${this.name} (${
-            selection ? selection.label : ""
-          })`
-        );
+        const item = {
+          id: this.id,
+          quantity: this.quantity,
+          variation: variation ? variation.label : "",
+        };
+        this.$store.dispatch("shop/addCartItem", item);
         this.closeModal();
       }
     },

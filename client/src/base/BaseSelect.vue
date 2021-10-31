@@ -82,7 +82,7 @@ export default {
     width: 100%;
     height: 100%;
     padding: 0.5em;
-    transition: background-color 0.25s ease;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
     cursor: pointer;
     &:hover,
     &:focus {
@@ -101,7 +101,7 @@ export default {
   &--error {
     animation: error-animation 0.5s linear forwards;
     .select__field {
-        border-color: $color-red;
+      border-color: $color-red;
     }
   }
 }

@@ -1,5 +1,4 @@
 import ShopPage from "../pages/ShopPage.vue";
-import ShopCheckout from "../components/ShopCheckout.vue";
 import ShopConfirmation from "../components/ShopConfirmation.vue";
 
 export default {
@@ -7,11 +6,6 @@ export default {
   path: "/karte",
   component: ShopPage,
   children: [
-    {
-      name: "checkout",
-      path: "bestellen",
-      component: ShopCheckout,
-    },
     {
       name: "order-confirmation",
       path: "danke",
