@@ -10,7 +10,21 @@ export default {
     if (index !== -1) {
       state.cartItems[index].quantity += quantity;
     } else {
-      state.cartItems.push(payload);
+      const { name, price } = state.shopItems.find((item) => item._id === id);
+      state.cartItems.push({
+        id,
+        name,
+        quantity,
+        price,
+        variation,
+      });
     }
+  },
+  removeCartItem(state, payload) {
+    const { id, variation } = payload;
+    const itemIndex = state.cartItems.findIndex((item) => {
+      return item.id === id && item.variation === variation;
+    });
+    state.cartItems.splice(itemIndex, 1);
   },
 };

@@ -3,7 +3,7 @@
     <div class="summary__total">{{ formattedTotal }}</div>
     <button
       class="summary__button"
-      :class="[animatedButton, rotatedButton]"
+      :class="animatedButton"
       @click="toggleCheckout"
     >
       <transition name="summary__icon-">
@@ -86,9 +86,6 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1rem;
-  max-width: $screen-tablet-l;
-  margin: 0 auto;
   &__total {
     font-size: 2rem;
     font-weight: 300;

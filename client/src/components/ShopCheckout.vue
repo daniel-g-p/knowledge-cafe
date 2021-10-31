@@ -1,20 +1,28 @@
 <template>
   <transition name="checkout-">
     <section v-if="cartItems.length" class="checkout" :class="collapsedClass">
-      <shop-checkout-summary
-        :collapsed="checkoutCollapsed"
-        @toggle-checkout="toggleCheckout"
-      ></shop-checkout-summary>
+      <div class="checkout__content">
+        <shop-checkout-summary
+          :collapsed="checkoutCollapsed"
+          @toggle-checkout="toggleCheckout"
+        ></shop-checkout-summary>
+        <shop-checkout-items
+          :items="cartItems"
+          @remove-item="removeItem"
+        ></shop-checkout-items>
+      </div>
     </section>
   </transition>
 </template>
 
 <script>
 import ShopCheckoutSummary from "./ShopCheckoutSummary.vue";
+import ShopCheckoutItems from "./ShopCheckoutItems.vue";
 
 export default {
   components: {
     ShopCheckoutSummary,
+    ShopCheckoutItems,
   },
   data() {
     return {
@@ -33,6 +41,11 @@ export default {
     toggleCheckout() {
       this.checkoutCollapsed = !this.checkoutCollapsed;
       this.$emit("toggle-checkout");
+    },
+    removeItem() {
+      if (!this.cartItems.length) {
+        this.toggleCheckout();
+      }
     },
   },
 };
@@ -57,6 +70,11 @@ export default {
   &--enter-from,
   &--leave-to {
     top: 100vh;
+  }
+  &__content {
+    max-width: $screen-tablet-l;
+    margin: 0 auto;
+    padding: 0 1rem;
   }
 }
 </style>

@@ -8,4 +8,7 @@ export default {
   addCartItem(context, payload) {
     context.commit("addCartItem", payload);
   },
+  removeCartItem(context, payload) {
+    context.commit("removeCartItem", payload);
+  },
 };

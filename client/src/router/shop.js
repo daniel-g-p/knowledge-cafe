@@ -5,11 +5,4 @@ export default {
   name: "shop",
   path: "/karte",
   component: ShopPage,
-  children: [
-    {
-      name: "order-confirmation",
-      path: "danke",
-      component: ShopConfirmation,
-    },
-  ],
 };
