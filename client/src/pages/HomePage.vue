@@ -4,11 +4,7 @@
     <div class="home__content">
       <icon-logo color="color" :height="6"></icon-logo>
       <h1 class="home__title">Willkommen im Knowledge Café!</h1>
-      <base-button
-        button-color="gold"
-        button-type="link"
-        :button-link="buttonLink"
-      >
+      <base-button color="gold" type="link" :link="buttonLink">
         Zur Karte
       </base-button>
     </div>

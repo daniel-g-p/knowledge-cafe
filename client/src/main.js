@@ -7,6 +7,7 @@ import store from "./store/index.js";
 import IconLogo from "./layout/IconLogo.vue";
 import BaseButton from "./base/BaseButton.vue";
 import BaseTitle from "./base/BaseTitle.vue";
+import BaseCard from "./base/BaseCard.vue";
 
 const app = createApp(App);
 
@@ -16,5 +17,6 @@ app.use(store);
 app.component("IconLogo", IconLogo);
 app.component("BaseButton", BaseButton);
 app.component("BaseTitle", BaseTitle);
+app.component("BaseCard", BaseCard);
 
 app.mount("#app");

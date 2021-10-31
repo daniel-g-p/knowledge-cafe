@@ -1,6 +1,6 @@
 <template>
   <button
-    v-if="buttonType === 'button'"
+    v-if="type === 'button'"
     class="button"
     :class="[colorClass, styleClass]"
   >
@@ -8,7 +8,7 @@
   </button>
   <router-link
     v-else
-    :to="buttonLink"
+    :to="link"
     class="button"
     :class="[colorClass, styleClass]"
   >
@@ -19,28 +19,28 @@
 <script>
 export default {
   props: {
-    buttonType: {
+    type: {
       type: String,
       default: "button",
       validator(value) {
         return ["button", "link"].includes(value);
       },
     },
-    buttonColor: {
+    color: {
       type: String,
       default: "gold",
       validator(value) {
         return ["gold", "green", "white", "black"].includes(value);
       },
     },
-    buttonStyle: {
+    style: {
       type: String,
       default: "fill",
       validator(value) {
         return ["fill", "outline"].includes(value);
       },
     },
-    buttonLink: {
+    link: {
       type: Object,
       validator(value) {
         return value.name ? true : false;
@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     colorClass() {
-      switch (this.buttonColor) {
+      switch (this.color) {
         case "gold":
           return { "button--gold": true };
         case "green":
@@ -61,7 +61,7 @@ export default {
       }
     },
     styleClass() {
-      switch (this.buttonStyle) {
+      switch (this.style) {
         case "fill":
           return { "button--fill": true };
         case "outline":

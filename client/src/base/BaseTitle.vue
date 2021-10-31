@@ -10,6 +10,7 @@
   color: $color-black;
   font-size: 2rem;
   padding: 0.25em;
+  margin-bottom: 1em;
   &__text {
     position: relative;
     font-size: inherit;
