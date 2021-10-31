@@ -10,6 +10,7 @@
           :items="cartItems"
           @remove-item="removeItem"
         ></shop-checkout-items>
+        <shop-checkout-form></shop-checkout-form>
       </div>
     </section>
   </transition>
@@ -18,11 +19,13 @@
 <script>
 import ShopCheckoutSummary from "./ShopCheckoutSummary.vue";
 import ShopCheckoutItems from "./ShopCheckoutItems.vue";
+import ShopCheckoutForm from "./ShopCheckoutForm.vue";
 
 export default {
   components: {
     ShopCheckoutSummary,
     ShopCheckoutItems,
+    ShopCheckoutForm,
   },
   data() {
     return {
