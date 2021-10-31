@@ -54,6 +54,7 @@ export default {
   left: 0;
   width: 100vw;
   height: 100vh;
+  padding: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,10 +83,16 @@ export default {
     max-width: 22.5rem;
     transition: transform 0.25s ease;
   }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
   &__title {
     font-weight: 400;
     font-size: 1.5rem;
     padding-right: 1.5rem;
+    margin-bottom: 1rem;
   }
   &__close {
     position: absolute;

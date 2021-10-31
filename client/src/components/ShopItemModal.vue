@@ -1,9 +1,17 @@
 <template>
-  <base-modal :title="name" :open="open" @close-modal="closeModal"></base-modal>
+  <base-modal :title="name" :open="open" @close-modal="closeModal">
+    <shop-item-quantity></shop-item-quantity>
+    <base-button>Hello</base-button>
+  </base-modal>
 </template>
 
 <script>
+import ShopItemQuantity from "./ShopItemQuantity.vue";
+
 export default {
+  components: {
+    ShopItemQuantity,
+  },
   props: {
     open: {
       type: Boolean,
