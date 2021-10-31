@@ -17,17 +17,20 @@
       :variations="activeVariations"
       @close-modal="toggleProduct"
     ></shop-item-modal>
+    <shop-checkout></shop-checkout>
   </main>
 </template>
 
 <script>
 import ShopItem from "../components/ShopItem.vue";
 import ShopItemModal from "../components/ShopItemModal.vue";
+import ShopCheckout from "../components/ShopCheckout.vue";
 
 export default {
   components: {
     ShopItem,
     ShopItemModal,
+    ShopCheckout,
   },
   data() {
     return {

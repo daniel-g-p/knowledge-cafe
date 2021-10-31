@@ -76,7 +76,7 @@ export default {
   &__box {
     position: relative;
     border-radius: 0.25rem;
-    padding: 1rem;
+    padding: 1.5rem;
     background-color: $color-white;
     color: $color-black;
     min-width: 15rem;
