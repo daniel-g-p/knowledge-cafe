@@ -1,12 +1,20 @@
 <template>
-  <form class="form">
+  <form class="form" @submit.prevent="submitForm">
     <base-title>Login</base-title>
-    <base-textbox label="Benutzer" id="user" v-model="user"></base-textbox>
+    <base-textbox
+      label="Benutzer"
+      id="user"
+      :error="errors.user"
+      v-model="user"
+      @remove-error="removeError('user')"
+    ></base-textbox>
     <base-textbox
       label="Passwort"
       id="password"
       type="password"
+      :error="errors.password"
       v-model="password"
+      @remove-error="removeError('password')"
     ></base-textbox>
     <base-button>Einloggen</base-button>
     <base-link
@@ -24,7 +32,47 @@ export default {
       user: "",
       password: "",
       resetPasswordLink: { name: "forgot-password" },
+      buttonLoading: false,
+      errors: {
+        user: false,
+        password: false,
+      },
     };
+  },
+  methods: {
+    removeError(field) {
+      this.errors[field] = false;
+    },
+    validateForm() {
+      if (!this.user) {
+        this.errors.user = true;
+      }
+      if (!this.password) {
+        this.errors.password = true;
+      }
+      return this.user && this.password;
+    },
+    submitForm() {
+      if (!this.validateForm()) {
+        return;
+      }
+      const data = { user: this.user, password: this.password };
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+      fetch(`${process.env.VUE_APP_API}/account/login`, options)
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>

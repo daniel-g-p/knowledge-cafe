@@ -32,6 +32,11 @@ export default class User {
     };
     return await collection.updateOne(filter, update);
   }
+  static async findByUser(user) {
+    const collection = getDatabase().collection("users");
+    const query = { $or: [{ username: user }, { email: user }] };
+    return await collection.findOne(query);
+  }
   static async deleteAll() {
     const collection = getDatabase().collection("users");
     return await collection.deleteMany({});

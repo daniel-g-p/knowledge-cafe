@@ -8,7 +8,7 @@ const validate = (data, ...conditions) => {
       return condition;
     }
   }
-  return { status: 200, valid: true, data };
+  return { valid: true, data };
 };
 
 export const orderSchema = (order) => {
@@ -20,5 +20,16 @@ export const orderSchema = (order) => {
         ["cash", "card", "paypal"].includes(order.paymentMethod),
       "Bitte wähle eine Zahlungsmethode."
     )
+  );
+};
+
+export const loginSchema = (login) => {
+  return validate(
+    login,
+    condition(
+      login.user,
+      "Bitte gebe deinen Benutzernamen oder deine Email an."
+    ),
+    condition(login.password, "Bitte gebe dein Passwort ein.")
   );
 };

@@ -1,7 +1,7 @@
 import Chance from "chance";
 
 import { connectToDatabase } from "./utilities/database.js";
-import { hashPassword, verifyPassword } from "./utilities/encryption.js";
+import { hashPassword } from "./utilities/encryption.js";
 
 import Product from "./models/Product.js";
 import Event from "./models/Event.js";
@@ -145,7 +145,6 @@ const seedAdmin = async () => {
   const name = "Admin";
   const username = "admin";
   const password = await hashPassword("test");
-  console.log(password);
   await User.verify(insertedId.toString(), name, username, password);
   console.log("Admin seeded.");
   return admin;

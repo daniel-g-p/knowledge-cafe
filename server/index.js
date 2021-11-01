@@ -7,7 +7,7 @@ import { errorHandler } from "./utilities/error-handling.js";
 
 import rootRouter from "./routes/root.js";
 import shopRouter from "./routes/shop.js";
-import authenticationRouter from "./routes/authentication.js";
+import accountRouter from "./routes/account.js";
 import ordersRouter from "./routes/orders.js";
 import eventsRouter from "./routes/events.js";
 import productsRouter from "./routes/products.js";
@@ -23,7 +23,7 @@ app.use(express.json());
 
 app.use("/", rootRouter);
 app.use("/shop", shopRouter);
-app.use("/authentication", authenticationRouter);
+app.use("/account", accountRouter);
 app.use("/orders", ordersRouter);
 app.use("/events", eventsRouter);
 app.use("/products", productsRouter);
