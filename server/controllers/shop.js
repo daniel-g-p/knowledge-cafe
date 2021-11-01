@@ -28,7 +28,10 @@ export default {
       data.name,
       data.comments,
       data.items,
-      data.paymentMethod
+      data.paymentMethod,
+      data.items.reduce((result, item) => {
+        return result + item.price * item.quantity;
+      }, 0)
     ).create();
     if (!order.acknowledged) {
       return res.status(400).json({
@@ -38,7 +41,7 @@ export default {
       });
     }
     return res.json({
-      message: `Wir haben deine Bestellung empfangen, ${data.name}. Wir rufen dich, sobald dein Kaffee bereit ist, vielen Dank!`,
+      message: `Wir haben deine Bestellung erhalten, ${data.name}. Wir rufen dich, sobald dein Kaffee bereit ist, vielen Dank!`,
       status: 200,
     });
   },

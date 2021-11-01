@@ -3,7 +3,6 @@ import Chance from "chance";
 import { connectToDatabase } from "./utilities/database.js";
 import Product from "./models/Product.js";
 import Event from "./models/Event.js";
-import OrderItem from "./models/OrderItem.js";
 import Order from "./models/Order.js";
 import User from "./models/User.js";
 
@@ -44,6 +43,23 @@ const productData = [
   },
 ];
 
+const teamData = [
+  "Emilie",
+  "Florin",
+  "Rico",
+  "Daniel",
+  "Clara",
+  "Anna Maria",
+  "Leonie",
+  "Alexis",
+  "Allie",
+  "Vivianne",
+  "Feli",
+  "Xiannan",
+  "Caro",
+  "Olivia",
+];
+
 const seedProducts = async (productData) => {
   await Product.deleteAll();
   const products = [];
@@ -66,7 +82,7 @@ const seedEvents = async (numberOfEvents) => {
   await Event.deleteAll();
   const events = [];
   for (let i = 0; i < numberOfEvents; i++) {
-    const event = new Event(chance.word());
+    const event = new Event(`Testevent ${i + 1}`);
     await event.create();
     events.push(event);
   }
@@ -76,40 +92,36 @@ const seedEvents = async (numberOfEvents) => {
 
 const seedOrders = async (products, events, ordersPerEvent) => {
   await Order.deleteAll();
-  const paymentMethods = ["cash", "card", "paypal"];
   const orders = [];
   for (let event of events) {
     for (let i = 0; i < ordersPerEvent; i++) {
       const numberOfItems = chance.integer({ min: 1, max: 3 });
       const items = [];
       for (let j = 0; j < numberOfItems; j++) {
-        const product =
-          products[chance.integer({ min: 0, max: products.length - 1 })];
-        const variation = product.variations.length
-          ? product.variations[
-              chance.integer({ min: 0, max: product.variations.length - 1 })
-            ]
-          : undefined;
-        const item = new OrderItem(
-          product._id.toString(),
-          chance.integer({ min: 1, max: 2 }),
-          variation
-        );
+        const prodIndex = chance.integer({ min: 0, max: products.length - 1 });
+        const { _id, name, price, variations } = products[prodIndex];
+        const hasVars = variations.length;
+        const varIndex = hasVars
+          ? chance.integer({ min: 0, max: variations.length - 1 })
+          : 0;
+        const variation = varIndex ? variations[varIndex] : "";
+        const item = {
+          id: _id,
+          name,
+          quantity: 1,
+          price,
+          variation,
+        };
         items.push(item);
       }
       const order = new Order(
         event._id.toString(),
         chance.first(),
-        chance.bool() ? chance.sentence() : null,
+        chance.bool() ? "Lorem ipsum dolor sit amet" : "",
         items,
-        paymentMethods[
-          chance.integer({ min: 0, max: paymentMethods.length - 1 })
-        ],
+        "cash",
         items.reduce((result, item) => {
-          const { price } = products.find(
-            (product) => product._id.toString() === item.productId
-          );
-          return result + price * item.quantity;
+          return result + item.price * item.quantity;
         }, 0)
       );
       await order.create();
@@ -120,18 +132,15 @@ const seedOrders = async (products, events, ordersPerEvent) => {
   return orders;
 };
 
-const seedUsers = async (numberOfUsers) => {
+const seedUsers = async (teamNames) => {
   await User.deleteAll();
   const users = [];
-  const adminUser = new User("Admin", "admin@knowledgecafe.de", "admin");
-  await adminUser.create();
-  users.push(adminUser);
-  for (let i = 0; i < numberOfUsers; i++) {
-    const user = new User(
-      chance.first(),
-      chance.email({ domain: "knowledgecafe.de" }),
-      "member"
-    );
+  const admin = new User("Admin", "admin@knowledgecafe.de", "admin");
+  await admin.create();
+  users.push(admin);
+  for (let name of teamNames) {
+    const email = `${name.toLowerCase().replaceAll(" ", "_")}@knowledgecafe.de`;
+    const user = new User(name, email);
     await user.create();
     users.push(user);
   }
@@ -145,7 +154,7 @@ const seedDatabase = async () => {
     const products = await seedProducts(productData);
     const events = await seedEvents(1);
     const orders = await seedOrders(products, events, 50);
-    const users = await seedUsers(5);
+    const users = await seedUsers(teamData);
     console.log("Database seeded.");
   } catch (error) {
     console.log(error);

@@ -1,7 +1,7 @@
 import { getDatabase } from "../utilities/database.js";
 
 export default class User {
-  constructor(name, email, status) {
+  constructor(name, email, status = "user") {
     this.name = name;
     this.email = email;
     this.status = status;
