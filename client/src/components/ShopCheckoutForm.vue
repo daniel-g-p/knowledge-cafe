@@ -24,6 +24,9 @@
       <base-button>Bestellen</base-button>
     </form>
   </transition>
+  <base-modal :open="modal.open" :title="modal.title" @close-modal="closeModal">
+    <p>{{ modal.text }}</p>
+  </base-modal>
 </template>
 
 <script>
@@ -47,6 +50,11 @@ export default {
       errors: {
         name: false,
         paymentMethod: false,
+      },
+      modal: {
+        open: false,
+        title: "",
+        text: "",
       },
     };
   },
@@ -83,11 +91,20 @@ export default {
       fetch(`${process.env.VUE_APP_API}/shop`, requestOptions)
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
+          if (res.status === 200) {
+            this.modal.title = "Fehler";
+            this.modal.text = res.message;
+            this.modal.open = true;
+          } else {
+            console.log(res);
+          }
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    closeModal() {
+      this.modal.open = false;
     },
   },
 };

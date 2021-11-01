@@ -29,13 +29,13 @@
 <script>
 export default {
   props: {
-    title: {
-      type: String,
-      default: "",
-    },
     open: {
       type: Boolean,
       default: false,
+    },
+    title: {
+      type: String,
+      default: "",
     },
   },
   emits: ["close-modal"],
@@ -51,12 +51,13 @@ export default {
 @use "../styles/index.scss" as *;
 .modal {
   background-color: $color-shadow;
+  backdrop-filter: blur(0.125rem);
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  padding: 1rem;
+  padding: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;

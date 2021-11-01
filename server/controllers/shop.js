@@ -13,13 +13,14 @@ export default {
   async placeOrder(req, res, next) {
     const { valid, message, data } = orderSchema(req.body);
     if (!valid) {
-      return res.status(400).json({ message });
+      return res.status(400).json({ message, status: 400 });
     }
     const event = await Event.findActive();
     if (!event) {
       return res.status(400).json({
         message:
           "Tut uns Leid, leider haben wir gerade keinen Verkauf am laufen.",
+        status: 400,
       });
     }
     const order = await new Order(
@@ -33,10 +34,12 @@ export default {
       return res.status(400).json({
         message:
           "Tut uns Leid, wir konnten deine Bestellung leider nicht aufnehmen.",
+        status: 400,
       });
     }
     return res.json({
       message: `Danke für deine Bestellung, ${data.name}! Wir rufen dich, sobald dein Kaffee bereit ist.`,
+      status: 200,
     });
   },
 };

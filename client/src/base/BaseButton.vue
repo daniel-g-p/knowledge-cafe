@@ -4,7 +4,12 @@
     class="button"
     :class="[colorClass, styleClass]"
   >
-    <slot></slot>
+    <div v-if="!loading" class="button__content"><slot></slot></div>
+    <div v-else class="button__loader">
+      <div class="button__loader-bar button__loader-bar--1"></div>
+      <div class="button__loader-bar button__loader-bar--2"></div>
+      <div class="button__loader-bar button__loader-bar--3"></div>
+    </div>
   </button>
   <router-link
     v-else
@@ -12,7 +17,8 @@
     class="button"
     :class="[colorClass, styleClass]"
   >
-    <slot></slot>
+    <div class="button__content"><slot></slot></div>
+    <div class="button__loader"></div>
   </router-link>
 </template>
 
@@ -46,6 +52,10 @@ export default {
         return value.name ? true : false;
       },
     },
+    loading: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     colorClass() {
@@ -75,12 +85,37 @@ export default {
 <style lang="scss" scoped>
 @use "../styles/index.scss" as *;
 .button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0.5em 1em;
   border-radius: 2em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.25s ease, color 0.25s ease;
+  &__loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 1rem;
+  }
+  &__loader-bar {
+    display: block;
+    width: 0.5rem;
+    background-color: currentColor;
+    border-radius: 1rem;
+    &--1 {
+      animation: loading-animation 1s ease-in-out infinite;
+    }
+    &--2 {
+      margin: 0 0.25rem;
+      animation: loading-animation 1s ease-in-out 0.2s infinite;
+    }
+    &--3 {
+      animation: loading-animation 1s ease-in-out 0.4s infinite;
+    }
+  }
   &--fill {
     &.button--gold {
       background-color: $color-gold;
@@ -146,6 +181,21 @@ export default {
         color: darken($color-white, 10);
       }
     }
+  }
+}
+
+@keyframes loading-animation {
+  0% {
+    height: 0.5rem;
+  }
+  30% {
+    height: 1rem;
+  }
+  60% {
+    height: 0.5rem;
+  }
+  100% {
+    height: 0.5rem;
   }
 }
 </style>
