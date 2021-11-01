@@ -6,12 +6,13 @@ import ResetPasswordForm from "../components/ResetPasswordForm.vue";
 
 export default {
   name: "account",
-  path: "/benutzer",
+  path: "/account",
+  redirect: "/account/login",
   component: AccountPage,
   children: [
     {
       name: "login",
-      path: "anmelden",
+      path: "login",
       component: LoginForm,
     },
     {

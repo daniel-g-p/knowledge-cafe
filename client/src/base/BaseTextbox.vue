@@ -9,16 +9,10 @@
       @input="setValue"
     ></textarea>
     <input
-      v-else-if="type === 'email'"
-      class="textbox__input textbox__input--email"
-      type="text"
-      :value="modelValue"
-      @input="setValue"
-    />
-    <input
       v-else
       class="textbox__input"
-      type="text"
+      :class="[emailClass, passwordClass]"
+      :type="type"
       :id="id"
       :value="modelValue"
       @input="setValue"
@@ -45,7 +39,7 @@ export default {
       type: String,
       default: "text",
       validator(value) {
-        return ["text", "textarea", "email"].includes(value);
+        return ["text", "textarea", "email", "password"].includes(value);
       },
     },
     modelValue: {
@@ -57,6 +51,12 @@ export default {
   computed: {
     errorClass() {
       return { "textbox--error": this.error ? true : false };
+    },
+    emailClass() {
+      return { "textbox__input--email": this.type === "email" };
+    },
+    passwordClass() {
+      return { "textbox__input--email": this.type === "password" };
     },
   },
   methods: {

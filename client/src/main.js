@@ -11,6 +11,7 @@ import BaseCard from "./base/BaseCard.vue";
 import BaseModal from "./base/BaseModal.vue";
 import BaseSelect from "./base/BaseSelect.vue";
 import BaseTextbox from "./base/BaseTextbox.vue";
+import BaseLink from "./base/BaseLink.vue";
 
 const app = createApp(App);
 
@@ -24,5 +25,6 @@ app.component("BaseCard", BaseCard);
 app.component("BaseModal", BaseModal);
 app.component("BaseSelect", BaseSelect);
 app.component("BaseTextbox", BaseTextbox);
+app.component("BaseLink", BaseLink);
 
 app.mount("#app");
