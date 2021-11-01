@@ -64,7 +64,30 @@ export default {
       return this.name && this.paymentMethod ? true : false;
     },
     submitForm() {
-      const valid = this.validateForm();
+      if (!this.validateForm()) {
+        return;
+      }
+      const order = {
+        name: this.name,
+        comments: this.comments,
+        paymentMethod: this.paymentMethod,
+        items: this.$store.getters["shop/cartItems"],
+      };
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(order),
+      };
+      fetch(`${process.env.VUE_APP_API}/shop`, requestOptions)
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

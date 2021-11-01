@@ -1,27 +1,29 @@
 <template>
-  <transition name="modal-">
-    <div class="modal" v-if="open">
-      <div class="modal__box">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="modal__close"
-          viewBox="0 0 16 16"
-          @click="closeModal"
-        >
-          <path
-            d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"
-          />
-          <path
-            d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"
-          />
-        </svg>
-        <h2 class="modal__title" v-if="title">{{ title }}</h2>
-        <div class="modal__content">
-          <slot></slot>
+  <teleport to="body">
+    <transition name="modal-">
+      <div class="modal" v-if="open">
+        <div class="modal__box">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="modal__close"
+            viewBox="0 0 16 16"
+            @click="closeModal"
+          >
+            <path
+              d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"
+            />
+            <path
+              d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"
+            />
+          </svg>
+          <h2 class="modal__title" v-if="title">{{ title }}</h2>
+          <div class="modal__content">
+            <slot></slot>
+          </div>
         </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </teleport>
 </template>
 
 <script>

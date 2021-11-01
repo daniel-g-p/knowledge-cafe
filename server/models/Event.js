@@ -16,6 +16,10 @@ export default class Event {
     const collection = getDatabase().collection("events");
     return await collection.insertOne(this);
   }
+  static async findActive() {
+    const collection = getDatabase().collection("events");
+    return await collection.findOne({ end: null }, { projection: { _id: 1 } });
+  }
   static async deleteAll() {
     const collection = getDatabase().collection("events");
     return await collection.deleteMany({});
