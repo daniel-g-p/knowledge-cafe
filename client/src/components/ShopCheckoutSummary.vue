@@ -60,7 +60,7 @@ export default {
       return `€${multiple.slice(0, length - 2)},${multiple.slice(length - 2)}`;
     },
     animatedButton() {
-      return { "summary__button--highlighted": this.buttonHighlighted };
+      return { "summary__button--highlighted": this.buttonHighlighted && this.collapsed };
     },
   },
   methods: {

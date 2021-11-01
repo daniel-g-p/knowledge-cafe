@@ -77,12 +77,16 @@ export default {
 @use "../styles/index.scss" as *;
 .shop {
   padding: 2rem 1rem;
-  max-width: $screen-tablet-l;
+  max-width: $screen-tablet-s;
   margin: 0 auto;
+  @include responsive($screen-mobile-m) {
+    padding: 3rem 1.5rem;
+  }
   &__list {
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    padding-bottom: 4rem;
   }
 }
 </style>

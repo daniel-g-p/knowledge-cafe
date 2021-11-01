@@ -9,10 +9,11 @@
           ></shop-checkout-summary>
           <shop-checkout-items
             :items="cartItems"
+            :collapsed="checkoutCollapsed"
             @remove-item="removeItem"
           ></shop-checkout-items>
         </div>
-        <shop-checkout-form></shop-checkout-form>
+        <shop-checkout-form :collapsed="checkoutCollapsed"></shop-checkout-form>
       </div>
     </section>
   </transition>
@@ -77,7 +78,7 @@ export default {
     top: 100vh;
   }
   &__content {
-    max-width: $screen-tablet-l;
+    max-width: $screen-tablet-s;
     margin: 0 auto;
     padding: 0 1rem 1rem;
     height: 100vh;

@@ -1,16 +1,18 @@
 <template>
-  <section class="items">
-    <shop-checkout-item
-      v-for="item in items"
-      :key="`${item.id}-${item.variation}`"
-      :id="item.id"
-      :name="item.name"
-      :variation="item.variation"
-      :quantity="item.quantity"
-      :price="item.price"
-      @remove-item="removeItem"
-    ></shop-checkout-item>
-  </section>
+  <transition name="items-">
+    <section v-if="!collapsed" class="items">
+      <shop-checkout-item
+        v-for="item in items"
+        :key="`${item.id}-${item.variation}`"
+        :id="item.id"
+        :name="item.name"
+        :variation="item.variation"
+        :quantity="item.quantity"
+        :price="item.price"
+        @remove-item="removeItem"
+      ></shop-checkout-item>
+    </section>
+  </transition>
 </template>
 
 <script>
@@ -23,6 +25,10 @@ export default {
   props: {
     items: {
       type: Array,
+      required: true,
+    },
+    collapsed: {
+      type: Boolean,
       required: true,
     },
   },
@@ -42,5 +48,16 @@ export default {
   display: grid;
   gap: 1rem;
   padding-top: 1rem;
+  &--enter-active {
+    transition: opacity 0.75s ease 0.25s, transform 0.75s ease 0.25s;
+  }
+  &--enter-from,
+  &--leave-to {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  &--leave-active {
+    transition-delay: 0.5s;
+  }
 }
 </style>

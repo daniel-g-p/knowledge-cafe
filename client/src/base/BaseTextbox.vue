@@ -74,7 +74,7 @@ export default {
   display: flex;
   flex-direction: column;
   &--error {
-    animation: error-animation 0.25s linear forwards;
+    animation: error-animation 0.5s linear forwards;
     .textbox__input {
       border-color: $color-red;
     }
