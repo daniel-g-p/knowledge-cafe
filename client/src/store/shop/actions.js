@@ -11,4 +11,7 @@ export default {
   removeCartItem(context, payload) {
     context.commit("removeCartItem", payload);
   },
+  clearCart(context) {
+    context.commit("clearCart");
+  },
 };

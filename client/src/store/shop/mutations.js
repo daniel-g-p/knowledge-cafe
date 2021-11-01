@@ -27,4 +27,7 @@ export default {
     });
     state.cartItems.splice(itemIndex, 1);
   },
+  clearCart(state) {
+    state.cartItems = [];
+  },
 };

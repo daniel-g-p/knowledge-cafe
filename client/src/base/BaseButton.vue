@@ -17,8 +17,12 @@
     class="button"
     :class="[colorClass, styleClass]"
   >
-    <div class="button__content"><slot></slot></div>
-    <div class="button__loader"></div>
+    <div v-if="!loading" class="button__content"><slot></slot></div>
+    <div v-else class="button__loader">
+      <div class="button__loader-bar button__loader-bar--1"></div>
+      <div class="button__loader-bar button__loader-bar--2"></div>
+      <div class="button__loader-bar button__loader-bar--3"></div>
+    </div>
   </router-link>
 </template>
 
@@ -89,16 +93,19 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 0.5em 1em;
+  min-height: 2rem;
   border-radius: 2em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.25s ease, color 0.25s ease;
+  &__content {
+    transition: transform 0.25s ease;
+  }
   &__loader {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 1rem;
   }
   &__loader-bar {
     display: block;
@@ -190,6 +197,7 @@ export default {
   }
   30% {
     height: 1rem;
+    opacity: 0.5;
   }
   60% {
     height: 0.5rem;

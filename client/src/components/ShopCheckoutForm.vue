@@ -21,7 +21,7 @@
         v-model="paymentMethod"
         @remove-error="removeError('paymentMethod')"
       ></base-select>
-      <base-button>Bestellen</base-button>
+      <base-button :loading="buttonLoading">Bestellen</base-button>
     </form>
   </transition>
   <base-modal :open="modal.open" :title="modal.title" @close-modal="closeModal">
@@ -37,6 +37,7 @@ export default {
       required: true,
     },
   },
+  emits: ["confirm-order"],
   data() {
     return {
       name: "",
@@ -56,6 +57,7 @@ export default {
         title: "",
         text: "",
       },
+      buttonLoading: false,
     };
   },
   methods: {
@@ -88,15 +90,17 @@ export default {
         },
         body: JSON.stringify(order),
       };
+      this.buttonLoading = true;
       fetch(`${process.env.VUE_APP_API}/shop`, requestOptions)
         .then((res) => res.json())
         .then((res) => {
-          if (res.status === 200) {
+          if (res.status !== 200) {
             this.modal.title = "Fehler";
             this.modal.text = res.message;
             this.modal.open = true;
           } else {
-            console.log(res);
+            this.buttonLoading = false;
+            this.$emit("confirm-order", res.message);
           }
         })
         .catch((error) => {

@@ -38,7 +38,7 @@ export default {
       });
     }
     return res.json({
-      message: `Danke für deine Bestellung, ${data.name}! Wir rufen dich, sobald dein Kaffee bereit ist.`,
+      message: `Wir haben deine Bestellung empfangen, ${data.name}. Wir rufen dich, sobald dein Kaffee bereit ist, vielen Dank!`,
       status: 200,
     });
   },

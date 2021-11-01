@@ -13,26 +13,41 @@
             @remove-item="removeItem"
           ></shop-checkout-items>
         </div>
-        <shop-checkout-form :collapsed="checkoutCollapsed"></shop-checkout-form>
+        <shop-checkout-form
+          :collapsed="checkoutCollapsed"
+          @confirm-order="confirmOrder"
+        ></shop-checkout-form>
       </div>
     </section>
   </transition>
+  <shop-confirmation
+    :open="confirmation.open"
+    :message="confirmation.text"
+    @close-confirmation="closeConfirmation"
+  ></shop-confirmation>
 </template>
 
 <script>
 import ShopCheckoutSummary from "./ShopCheckoutSummary.vue";
 import ShopCheckoutItems from "./ShopCheckoutItems.vue";
 import ShopCheckoutForm from "./ShopCheckoutForm.vue";
+import ShopConfirmation from "./ShopConfirmation.vue";
 
 export default {
   components: {
     ShopCheckoutSummary,
     ShopCheckoutItems,
     ShopCheckoutForm,
+    ShopConfirmation,
   },
+  emits: ["toggle-checkout"],
   data() {
     return {
       checkoutCollapsed: true,
+      confirmation: {
+        open: false,
+        text: "",
+      },
     };
   },
   computed: {
@@ -52,6 +67,17 @@ export default {
       if (!this.cartItems.length) {
         this.toggleCheckout();
       }
+    },
+    confirmOrder(message) {
+      this.$store.dispatch("shop/clearCart");
+      setTimeout(() => {
+        this.checkoutCollapsed = true;
+        this.confirmation.text = message;
+        this.confirmation.open = true;
+      }, 500);
+    },
+    closeConfirmation() {
+      this.confirmation.open = false;
     },
   },
 };
