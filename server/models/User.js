@@ -1,21 +1,36 @@
+import { ObjectId } from "mongodb";
+
 import { getDatabase } from "../utilities/database.js";
 
 export default class User {
-  constructor(name, email, status = "user") {
-    this.name = name;
+  constructor(email, token, status = "user") {
     this.email = email;
     this.status = status;
-    this.username = undefined;
-    this.password = undefined;
-    this.passwordReset = {
-      token: undefined,
-      expires: undefined,
+    this.name = "";
+    this.username = "";
+    this.password = "";
+    this.token = {
+      secret: token,
+      expires: new Date().getTime() + 1000 * 60 * 60 * 24,
     };
     this.timestamp = new Date();
   }
   async create() {
     const collection = getDatabase().collection("users");
     return await collection.insertOne(this);
+  }
+  static async verify(userId, name, username, password) {
+    const collection = getDatabase().collection("users");
+    const filter = { _id: new ObjectId(userId) };
+    const update = {
+      $set: {
+        name,
+        username,
+        password,
+        token: { secret: "", expires: null },
+      },
+    };
+    return await collection.updateOne(filter, update);
   }
   static async deleteAll() {
     const collection = getDatabase().collection("users");

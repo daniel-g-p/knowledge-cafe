@@ -1,6 +1,8 @@
 import Chance from "chance";
 
 import { connectToDatabase } from "./utilities/database.js";
+import { hashPassword, verifyPassword } from "./utilities/encryption.js";
+
 import Product from "./models/Product.js";
 import Event from "./models/Event.js";
 import Order from "./models/Order.js";
@@ -132,20 +134,21 @@ const seedOrders = async (products, events, ordersPerEvent) => {
   return orders;
 };
 
-const seedUsers = async (teamNames) => {
+const seedAdmin = async () => {
   await User.deleteAll();
-  const users = [];
-  const admin = new User("Admin", "admin@knowledgecafe.de", "admin");
-  await admin.create();
-  users.push(admin);
-  for (let name of teamNames) {
-    const email = `${name.toLowerCase().replaceAll(" ", "_")}@knowledgecafe.de`;
-    const user = new User(name, email);
-    await user.create();
-    users.push(user);
+  let token = "";
+  for (let i = 0; i < 6; i++) {
+    token = `${token}${chance.integer({ min: 0, max: 9 })}`;
   }
-  console.log("Users seeded.");
-  return users;
+  const admin = new User("admin@knowledgecafe.de", token, "admin");
+  const { insertedId } = await admin.create();
+  const name = "Admin";
+  const username = "admin";
+  const password = await hashPassword("test");
+  console.log(password);
+  await User.verify(insertedId.toString(), name, username, password);
+  console.log("Admin seeded.");
+  return admin;
 };
 
 const seedDatabase = async () => {
@@ -154,7 +157,7 @@ const seedDatabase = async () => {
     const products = await seedProducts(productData);
     const events = await seedEvents(1);
     const orders = await seedOrders(products, events, 50);
-    const users = await seedUsers(teamData);
+    const admin = await seedAdmin();
     console.log("Database seeded.");
   } catch (error) {
     console.log(error);
