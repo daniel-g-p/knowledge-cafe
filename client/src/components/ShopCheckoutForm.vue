@@ -8,12 +8,6 @@
         v-model="name"
         @remove-error="removeError('name')"
       ></base-textbox>
-      <base-textbox
-        type="textarea"
-        label="Sonderwünsche"
-        id="comments"
-        v-model="comments"
-      ></base-textbox>
       <base-select
         :options="paymentOptions"
         :error="errors.paymentMethod"
@@ -21,6 +15,12 @@
         v-model="paymentMethod"
         @remove-error="removeError('paymentMethod')"
       ></base-select>
+      <base-textbox
+        type="textarea"
+        label="Sonderwünsche"
+        id="comments"
+        v-model="comments"
+      ></base-textbox>
       <base-button :loading="buttonLoading">Bestellen</base-button>
     </form>
   </transition>
