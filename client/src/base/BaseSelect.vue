@@ -77,6 +77,7 @@ export default {
     margin-top: 0.25rem;
   }
   &__field {
+    font-weight: 700;
     border: 0.125rem solid $color-green;
     border-radius: 0.25rem;
     width: 100%;

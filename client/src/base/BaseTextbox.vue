@@ -85,6 +85,7 @@ export default {
     margin-bottom: 0.25rem;
   }
   &__input {
+    font-weight: 700;
     border: 0.125rem solid $color-green;
     border-radius: 0.25rem;
     padding: 0.5em;
