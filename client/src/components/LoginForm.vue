@@ -16,7 +16,7 @@
       v-model="password"
       @remove-error="removeError('password')"
     ></base-textbox>
-    <base-button>Einloggen</base-button>
+    <base-button :loading="buttonLoading">Einloggen</base-button>
     <base-link
       class="form__link"
       label="Passwort vergessen?"
@@ -81,6 +81,7 @@ export default {
         credentials: "include",
         body: JSON.stringify(data),
       };
+      this.buttonLoading = true;
       fetch(`${process.env.VUE_APP_API}/account/login`, options)
         .then((res) => res.json())
         .then((res) => {
@@ -93,6 +94,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          this.buttonLoading = false;
         });
     },
   },

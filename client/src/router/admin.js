@@ -10,13 +10,16 @@ export default {
   path: "/admin",
   redirect: "/admin/bestellungen",
   component: AdminPage,
-  beforeEnter() {
+  beforeEnter(to, from, next) {
     fetch(`${process.env.VUE_APP_API}/account/login`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        if (res.status !== 200) {
+          next({ name: "login" });
+        }
+        next();
       })
       .catch((error) => {
         console.log(error);
