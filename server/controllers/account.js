@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import { hashPassword, verifyPassword } from "../utilities/encryption.js";
 import { loginSchema } from "../utilities/validation.js";
 import User from "../models/User.js";
-import { signToken } from "../utilities/authentication.js";
+import { signToken, verifyToken } from "../utilities/authentication.js";
 
 export default {
   async login(req, res, next) {
@@ -24,17 +24,26 @@ export default {
           "Der Benutzer und das Passwort stimmen nicht überein, bitte überprüfe deine Eingabe.",
       });
     }
-    const userId = user._id.toString();
-    const token = signToken(userId);
     const secureEnvironment = process.env.NODE_ENV !== "development";
-    const cookieOptions = {
-      maxAge: 1000 * 60 * 60 * 24,
-      signed: true,
-      httpOnly: secureEnvironment,
-      secure: secureEnvironment,
-    };
     return res
-      .cookie("userId", token, cookieOptions)
-      .json({ message: "Login successful", status: 200 });
+      .status(200)
+      .cookie("userId", signToken(user._id.toString()), {
+        maxAge: 1000 * 60 * 60 * 24,
+        signed: true,
+        httpOnly: true,
+        secure: secureEnvironment,
+      })
+      .json({ status: 200 });
+  },
+  async verifyLogin(req, res, next) {
+    const { userId } = verifyToken(req.signedCookies.userId);
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    return res.status(200).json({ message: "Authorized" });
   },
 };

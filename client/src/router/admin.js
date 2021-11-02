@@ -8,7 +8,20 @@ import SettingsPage from "../pages/SettingsPage.vue";
 export default {
   name: "dashboard",
   path: "/admin",
+  redirect: "/admin/bestellungen",
   component: AdminPage,
+  beforeEnter() {
+    fetch(`${process.env.VUE_APP_API}/account/login`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
   children: [
     {
       name: "orders",

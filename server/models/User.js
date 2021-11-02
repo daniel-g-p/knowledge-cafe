@@ -32,6 +32,12 @@ export default class User {
     };
     return await collection.updateOne(filter, update);
   }
+  static async findById(userId) {
+    const collection = getDatabase().collection("users");
+    const query = { _id: new ObjectId(userId) };
+    const options = { projection: { _id: 1 } };
+    return await collection.findOne(query, options);
+  }
   static async findByUser(user) {
     const collection = getDatabase().collection("users");
     const query = { $or: [{ username: user }, { email: user }] };

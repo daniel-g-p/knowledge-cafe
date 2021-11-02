@@ -23,6 +23,9 @@
       :link="resetPasswordLink"
     ></base-link>
   </form>
+  <base-modal title="Fehler" :open="modal.open" @close-modal="closeModal">{{
+    modal.message
+  }}</base-modal>
 </template>
 
 <script>
@@ -37,11 +40,24 @@ export default {
         user: false,
         password: false,
       },
+      modal: {
+        open: false,
+        message: "",
+      },
     };
   },
   methods: {
     removeError(field) {
       this.errors[field] = false;
+    },
+    openModal(message) {
+      if (message) {
+        this.modal.message = message;
+      }
+      this.modal.open = true;
+    },
+    closeModal() {
+      this.modal.open = false;
     },
     validateForm() {
       if (!this.user) {
@@ -68,7 +84,12 @@ export default {
       fetch(`${process.env.VUE_APP_API}/account/login`, options)
         .then((res) => res.json())
         .then((res) => {
-          console.log(res);
+          if (res.status !== 200) {
+            this.openModal(res.message);
+          } else {
+            this.$store.dispatch("authentication/login");
+            this.$router.push("/admin");
+          }
         })
         .catch((error) => {
           console.log(error);
