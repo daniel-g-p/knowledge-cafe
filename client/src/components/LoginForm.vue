@@ -62,6 +62,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(data),
       };
       fetch(`${process.env.VUE_APP_API}/account/login`, options)

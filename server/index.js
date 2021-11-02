@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 
 import { connectToDatabase } from "./utilities/database.js";
 import { errorHandler } from "./utilities/error-handling.js";
@@ -18,8 +19,9 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
+app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));
 
 app.use("/", rootRouter);
 app.use("/shop", shopRouter);

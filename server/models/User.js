@@ -35,7 +35,8 @@ export default class User {
   static async findByUser(user) {
     const collection = getDatabase().collection("users");
     const query = { $or: [{ username: user }, { email: user }] };
-    return await collection.findOne(query);
+    const options = { projection: { _id: 1, password: 1 } };
+    return await collection.findOne(query, options);
   }
   static async deleteAll() {
     const collection = getDatabase().collection("users");

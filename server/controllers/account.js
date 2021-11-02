@@ -1,6 +1,8 @@
+import dotenv from "dotenv";
 import { hashPassword, verifyPassword } from "../utilities/encryption.js";
 import { loginSchema } from "../utilities/validation.js";
 import User from "../models/User.js";
+import { signToken } from "../utilities/authentication.js";
 
 export default {
   async login(req, res, next) {
@@ -22,6 +24,17 @@ export default {
           "Der Benutzer und das Passwort stimmen nicht überein, bitte überprüfe deine Eingabe.",
       });
     }
-    return res.json({ message: "Login successful", status: 200 });
+    const userId = user._id.toString();
+    const token = signToken(userId);
+    const secureEnvironment = process.env.NODE_ENV !== "development";
+    const cookieOptions = {
+      maxAge: 1000 * 60 * 60 * 24,
+      signed: true,
+      httpOnly: secureEnvironment,
+      secure: secureEnvironment,
+    };
+    return res
+      .cookie("userId", token, cookieOptions)
+      .json({ message: "Login successful", status: 200 });
   },
 };
