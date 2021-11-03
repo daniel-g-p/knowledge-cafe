@@ -21,11 +21,16 @@ export default class Order {
     const query = { eventId, completed: false };
     return await collection.find(query).toArray();
   }
-  static async complete(orderId) {
+  static async completeById(orderId) {
     const collection = getDatabase().collection("orders");
     const query = { _id: new ObjectId(orderId) };
     const update = { $set: { completed: true } };
     return await collection.updateOne(query, update);
+  }
+  static async deleteById(orderId) {
+    const collection = getDatabase().collection("orders");
+    const query = { _id: new ObjectId(orderId) };
+    return await collection.deleteOne(query);
   }
   static async deleteAll() {
     const collection = getDatabase().collection("orders");

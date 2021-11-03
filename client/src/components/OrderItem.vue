@@ -116,7 +116,20 @@ export default {
         });
     },
     cancelOrder() {
-      console.log(this.id);
+      const url = `${process.env.VUE_APP_API}/orders/cancel/${this.id}`;
+      const options = { method: "POST", credentials: "include" };
+      fetch(url, options)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.status !== 200) {
+            this.$emit("completion-failed");
+          } else {
+            this.$store.dispatch("orders/completeOrder", this.id);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

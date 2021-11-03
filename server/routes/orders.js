@@ -11,5 +11,6 @@ router.use(tryCatch(authorizeUser));
 router.get("/pending", tryCatch(controller.getPendingOrders));
 
 router.post("/complete/:orderId", tryCatch(controller.completeOrder));
+router.post("/cancel/:orderId", tryCatch(controller.cancelOrder));
 
 export default router;

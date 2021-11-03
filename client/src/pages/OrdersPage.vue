@@ -45,7 +45,7 @@ export default {
       this.$store.dispatch("orders/fetchOrders");
     },
     openModal(orderId) {
-      this.modal.message = `Die Bestellung #${orderId} konnte nicht abgeschlossen werden, bitte versuche es erneut.`;
+      this.modal.message = `Die Bestellung konnte nicht abgeschlossen werden, bitte versuche es erneut.`;
       this.modal.open = true;
     },
     closeModal() {
