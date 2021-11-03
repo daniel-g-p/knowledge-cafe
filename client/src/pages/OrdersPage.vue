@@ -41,6 +41,7 @@ export default {
 <style lang="scss" scoped>
 @use "../styles/index.scss" as *;
 .orders {
+  width: 100%;
   display: grid;
   gap: 1rem;
 }

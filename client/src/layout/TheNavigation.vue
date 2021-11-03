@@ -94,11 +94,11 @@ export default {
 <style lang="scss" scoped>
 @use "../styles/index.scss" as *;
 .nav {
+  width: 100%;
   position: fixed;
   z-index: 50;
   left: 0;
   bottom: 0;
-  width: 100vw;
   display: flex;
   box-shadow: 0 0 0.5rem $color-shadow;
   background-color: $color-white;

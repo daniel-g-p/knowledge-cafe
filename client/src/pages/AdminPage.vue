@@ -20,6 +20,7 @@ export default {
 <style lang="scss" scoped>
 @use "../styles/index.scss" as *;
 .main {
+  overflow-x: hidden;
   &__content {
     max-width: $screen-tablet-s;
     min-height: 100vh;
