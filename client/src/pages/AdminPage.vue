@@ -14,6 +14,9 @@ export default {
   components: {
     TheNavigation,
   },
+  mounted() {
+    this.$store.dispatch("authentication/login");
+  },
 };
 </script>
 

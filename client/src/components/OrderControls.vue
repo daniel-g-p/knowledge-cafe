@@ -8,7 +8,9 @@
         <div></div>
       </div>
     </div>
-    <base-button v-if="eventActive">Neue Bestellung</base-button>
+    <base-button v-if="eventActive" type="link" :link="newOrderLink"
+      >Neue Bestellung</base-button
+    >
     <div class="status__separator"></div>
   </aside>
   <base-modal title="Bestätigung" :open="modalOpen" @close-modal="toggleModal">
@@ -42,6 +44,9 @@ export default {
         "status__toggle--active": this.eventActive,
         "status__toggle--inactive": !this.eventActive,
       };
+    },
+    newOrderLink() {
+      return { name: "shop" };
     },
   },
   methods: {

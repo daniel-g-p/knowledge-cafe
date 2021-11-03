@@ -1,5 +1,10 @@
 <template>
   <main class="shop">
+    <div class="shop__admin">
+      <base-button v-if="isLoggedIn" type="link" :link="adminLink"
+        >Zurück</base-button
+      >
+    </div>
     <base-title>Unser Angebot</base-title>
     <section class="shop__list">
       <shop-item
@@ -61,6 +66,12 @@ export default {
         return [];
       }
     },
+    isLoggedIn() {
+      return this.$store.getters["authentication/loggedIn"];
+    },
+    adminLink() {
+      return { name: "orders" };
+    },
   },
   methods: {
     toggleProduct(productId) {
@@ -89,6 +100,11 @@ export default {
     gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
     padding-bottom: 4rem;
+  }
+  &__admin {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
   }
 }
 </style>

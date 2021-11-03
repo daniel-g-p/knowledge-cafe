@@ -78,6 +78,11 @@ export default {
     },
     closeConfirmation() {
       this.confirmation.open = false;
+      this.$router.push({
+        name: this.$store.getters["authentication/loggedIn"]
+          ? "orders"
+          : "welcome",
+      });
     },
   },
 };

@@ -29,7 +29,7 @@
           <span>Barzahlung</span>
         </div>
         <div class="order__actions">
-          <button class="order__button" @click="completeOrder">
+          <button class="order__button" @click="handleOrder('complete')">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="order__button-icon"
@@ -40,7 +40,7 @@
               />
             </svg>
           </button>
-          <button class="order__button" @click="cancelOrder">
+          <button class="order__button" @click="handleOrder('cancel')">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="order__button-icon"
@@ -99,30 +99,14 @@ export default {
     },
   },
   methods: {
-    completeOrder() {
-      const url = `${process.env.VUE_APP_API}/orders/complete/${this.id}`;
+    handleOrder(operation) {
+      const url = `${process.env.VUE_APP_API}/orders/${operation}/${this.id}`;
       const options = { method: "POST", credentials: "include" };
       fetch(url, options)
         .then((res) => res.json())
         .then((res) => {
           if (res.status !== 200) {
             this.$emit("completion-failed", this.id);
-          } else {
-            this.$store.dispatch("orders/completeOrder", this.id);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    cancelOrder() {
-      const url = `${process.env.VUE_APP_API}/orders/cancel/${this.id}`;
-      const options = { method: "POST", credentials: "include" };
-      fetch(url, options)
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.status !== 200) {
-            this.$emit("completion-failed");
           } else {
             this.$store.dispatch("orders/completeOrder", this.id);
           }
