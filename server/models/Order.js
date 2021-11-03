@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { getDatabase } from "../utilities/database.js";
 
 export default class Order {
@@ -17,8 +18,14 @@ export default class Order {
   }
   static async getPending(eventId) {
     const collection = getDatabase().collection("orders");
-    const query = { completed: false, eventId };
+    const query = { eventId, completed: false };
     return await collection.find(query).toArray();
+  }
+  static async complete(orderId) {
+    const collection = getDatabase().collection("orders");
+    const query = { _id: new ObjectId(orderId) };
+    const update = { $set: { completed: true } };
+    return await collection.updateOne(query, update);
   }
   static async deleteAll() {
     const collection = getDatabase().collection("orders");

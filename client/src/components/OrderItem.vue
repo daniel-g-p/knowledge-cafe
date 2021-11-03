@@ -29,7 +29,7 @@
           <span>Barzahlung</span>
         </div>
         <div class="order__actions">
-          <button class="order__button">
+          <button class="order__button" @click="completeOrder">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="order__button-icon"
@@ -40,7 +40,7 @@
               />
             </svg>
           </button>
-          <button class="order__button">
+          <button class="order__button" @click="cancelOrder">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="order__button-icon"
@@ -95,6 +95,14 @@ export default {
       const multiple = (this.total * 100).toString();
       const { length } = multiple;
       return `€${multiple.slice(0, length - 2)},${multiple.slice(length - 2)}`;
+    },
+  },
+  methods: {
+    completeOrder() {
+      this.$store.dispatch("orders/completeOrder", this.id);
+    },
+    cancelOrder() {
+      console.log(this.id);
     },
   },
 };

@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { application, Router } from "express";
 
 import { tryCatch } from "../utilities/error-handling.js";
 import { authorizeUser } from "../utilities/authorization.js";
@@ -6,10 +6,10 @@ import controller from "../controllers/orders.js";
 
 const router = Router();
 
-router.get(
-  "/pending",
-  tryCatch(authorizeUser),
-  tryCatch(controller.getPendingOrders)
-);
+router.use(tryCatch(authorizeUser));
+
+router.get("/pending", tryCatch(controller.getPendingOrders));
+
+router.post("/complete/:orderId", tryCatch(controller.completeOrder));
 
 export default router;
