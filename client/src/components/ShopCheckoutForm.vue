@@ -99,12 +99,14 @@ export default {
             this.modal.text = res.message;
             this.modal.open = true;
           } else {
-            this.buttonLoading = false;
             this.$emit("confirm-order", res.message);
           }
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          this.buttonLoading = false;
         });
     },
     closeModal() {

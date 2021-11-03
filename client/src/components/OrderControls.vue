@@ -1,13 +1,23 @@
 <template>
   <aside class="status">
-    <div class="status__text">
-      Verkaufsstatus: <span>{{ eventActive ? "Aktiv" : "Inaktiv" }}</span>
+    <div class="status__content">
+      <div class="status__text">
+        Verkaufsstatus: <span>{{ eventActive ? "Aktiv" : "Inaktiv" }}</span>
+      </div>
+      <div class="status__toggle" :class="toggleClass" @click="toggleStatus">
+        <div></div>
+      </div>
     </div>
-    <div class="status__toggle" :class="toggleClass" @click="toggleStatus">
-      <div></div>
-    </div>
+    <base-button v-if="eventActive">Neue Bestellung</base-button>
+    <div class="status__separator"></div>
   </aside>
-  <div class="status__separator"></div>
+  <base-modal :open="modalOpen" @close-modal="toggleModal">
+    <p>
+      Sicher, dass du den Verkauf
+      {{ eventActive ? "beenden" : "freigeben" }} möchtest?
+    </p>
+    <base-button @click="confirmToggle">Bestätigen</base-button>
+  </base-modal>
 </template>
 
 <script>
@@ -15,6 +25,7 @@ export default {
   data() {
     return {
       eventActive: false,
+      modalOpen: false,
     };
   },
   computed: {
@@ -26,7 +37,14 @@ export default {
     },
   },
   methods: {
+    toggleModal() {
+      this.modalOpen = !this.modalOpen;
+    },
     toggleStatus() {
+      this.toggleModal();
+    },
+    confirmToggle() {
+      this.toggleModal();
       this.eventActive = !this.eventActive;
     },
   },
@@ -37,12 +55,17 @@ export default {
 @use "../styles/index.scss" as *;
 
 .status {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: $color-grey-light;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $color-grey-light;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+  }
   &__text {
     font-size: 1.25rem;
     & > span {
@@ -94,7 +117,6 @@ export default {
     height: 0.125rem;
     background-color: $color-grey-light;
     border-radius: 1rem;
-    margin: 1rem 0;
   }
 }
 </style>
