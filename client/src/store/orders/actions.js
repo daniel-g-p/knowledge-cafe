@@ -5,12 +5,10 @@ export default {
     })
       .then((res) => res.json())
       .then((res) => {
-        const { orders } = res;
-        if (!orders) {
-          console.log(res);
-        } else {
-          context.commit("fetchOrders", orders);
-        }
+        console.log("REQUEST");
+        const { orders, event } = res;
+        context.commit("setEventStatus", event ? "active" : "inactive");
+        context.commit("fetchOrders", event ? orders : []);
       })
       .catch((error) => {
         console.log(error);
@@ -18,5 +16,8 @@ export default {
   },
   completeOrder(context, orderId) {
     context.commit("completeOrder", orderId);
+  },
+  toggleEventStatus(context, eventActive) {
+    context.commit("setEventStatus", eventActive ? "inactive" : "active");
   },
 };

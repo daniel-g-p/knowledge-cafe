@@ -11,12 +11,14 @@
     <base-button v-if="eventActive">Neue Bestellung</base-button>
     <div class="status__separator"></div>
   </aside>
-  <base-modal :open="modalOpen" @close-modal="toggleModal">
+  <base-modal title="Bestätigung" :open="modalOpen" @close-modal="toggleModal">
     <p>
       Sicher, dass du den Verkauf
       {{ eventActive ? "beenden" : "freigeben" }} möchtest?
     </p>
-    <base-button @click="confirmToggle">Bestätigen</base-button>
+    <base-button :loading="buttonLoading" @click="confirmToggle">{{
+      eventActive ? "Beenden" : "Freigeben"
+    }}</base-button>
   </base-modal>
 </template>
 
@@ -24,11 +26,17 @@
 export default {
   data() {
     return {
-      eventActive: false,
       modalOpen: false,
+      buttonLoading: false,
     };
   },
   computed: {
+    eventStatus() {
+      return this.$store.getters["orders/eventStatus"];
+    },
+    eventActive() {
+      return this.eventStatus === "active";
+    },
     toggleClass() {
       return {
         "status__toggle--active": this.eventActive,
@@ -45,7 +53,22 @@ export default {
     },
     confirmToggle() {
       this.toggleModal();
-      this.eventActive = !this.eventActive;
+      const url = `${process.env.VUE_APP_API}/events/${
+        this.eventActive ? "close" : "open"
+      }`;
+      const options = { method: "POST", credentials: "include" };
+      fetch(url, options)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.status === 200) {
+            this.$store.dispatch("orders/toggleEventStatus", this.eventActive);
+          } else {
+            console.log(res);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };

@@ -7,6 +7,7 @@ export default {
   state() {
     return {
       pendingOrders: [],
+      eventStatus: undefined,
     };
   },
   getters,
