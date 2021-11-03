@@ -62,6 +62,13 @@ const teamData = [
   "Olivia",
 ];
 
+const adminData = {
+  name: "admin",
+  username: "admin",
+  email: "admin@knowledgecafe.de",
+  password: "admin",
+};
+
 const seedProducts = async (productData) => {
   await Product.deleteAll();
   const products = [];
@@ -136,16 +143,15 @@ const seedOrders = async (products, events, ordersPerEvent) => {
 
 const seedAdmin = async () => {
   await User.deleteAll();
+  const { name, username, email, password } = adminData;
   let token = "";
   for (let i = 0; i < 6; i++) {
     token = `${token}${chance.integer({ min: 0, max: 9 })}`;
   }
-  const admin = new User("admin@knowledgecafe.de", token, "admin");
+  const admin = new User(email, token, "admin");
   const { insertedId } = await admin.create();
-  const name = "Admin";
-  const username = "admin";
-  const password = await hashPassword("test");
-  await User.verify(insertedId.toString(), name, username, password);
+  const hash = await hashPassword("admin");
+  await User.verify(insertedId.toString(), name, username, hash);
   console.log("Admin seeded.");
   return admin;
 };

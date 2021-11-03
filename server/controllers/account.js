@@ -42,7 +42,10 @@ export default {
     }
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(401).json({ message: "Unauthorized", status: 401 });
+      return res
+        .status(401)
+        .clearCookie("userId")
+        .json({ message: "Unauthorized", status: 401 });
     }
     return res.status(200).json({ message: "Authorized", status: 200 });
   },
