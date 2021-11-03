@@ -90,6 +90,7 @@ export default {
       default: "",
     },
   },
+  emits: ["completion-failed"],
   computed: {
     formattedTotal() {
       const multiple = (this.total * 100).toString();
@@ -99,7 +100,20 @@ export default {
   },
   methods: {
     completeOrder() {
-      this.$store.dispatch("orders/completeOrder", this.id);
+      const url = `${process.env.VUE_APP_API}/orders/complete/${this.id}`;
+      const options = { method: "POST", credentials: "include" };
+      fetch(url, options)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.status !== 200) {
+            this.$emit("completion-failed", this.id);
+          } else {
+            this.$store.dispatch("orders/completeOrder", this.id);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     cancelOrder() {
       console.log(this.id);
