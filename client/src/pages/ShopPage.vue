@@ -68,7 +68,9 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch("shop/fetchItems");
+    if (!this.shopItems.length) {
+      this.$store.dispatch("shop/fetchItems");
+    }
   },
 };
 </script>

@@ -1,6 +1,8 @@
 <template>
-  <main>
-    <router-view></router-view>
+  <main class="main">
+    <div class="main__content">
+      <router-view></router-view>
+    </div>
     <the-navigation></the-navigation>
   </main>
 </template>
@@ -14,3 +16,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@use "../styles/index.scss" as *;
+.main {
+  &__content {
+    max-width: $screen-tablet-s;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+}
+</style>

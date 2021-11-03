@@ -105,7 +105,7 @@ export default {
     text-align: center;
     padding: 0.75rem 0.375rem;
     border-top: 0.125rem solid transparent;
-    transition: background-color 0.25s ease;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
     &:hover,
     &:focus {
       background-color: $color-grey-light;
