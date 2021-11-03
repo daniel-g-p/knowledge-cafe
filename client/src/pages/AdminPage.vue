@@ -24,7 +24,10 @@ export default {
     max-width: $screen-tablet-s;
     min-height: 100vh;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 5rem;
+    @include responsive($screen-mobile-m) {
+      padding: 3rem 1.5rem 5rem;
+    }
   }
 }
 </style>
