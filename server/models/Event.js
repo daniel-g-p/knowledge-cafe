@@ -1,8 +1,8 @@
 import { getDatabase } from "../utilities/database.js";
 
 export default class Event {
-  constructor(title) {
-    this.title = title;
+  constructor() {
+    this.title = "";
     this.start = new Date();
     this.end = undefined;
     this.stats = {
