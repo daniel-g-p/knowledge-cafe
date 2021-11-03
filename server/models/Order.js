@@ -15,6 +15,11 @@ export default class Order {
     const collection = getDatabase().collection("orders");
     return await collection.insertOne(this);
   }
+  static async getPending(eventId) {
+    const collection = getDatabase().collection("orders");
+    const query = { completed: false, eventId };
+    return await collection.find(query).toArray();
+  }
   static async deleteAll() {
     const collection = getDatabase().collection("orders");
     return await collection.deleteMany({});

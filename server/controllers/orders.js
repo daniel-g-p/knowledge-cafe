@@ -1,1 +1,17 @@
-export default {};
+import Event from "../models/Event.js";
+import Order from "../models/Order.js";
+
+export default {
+  async getPendingOrders(req, res, next) {
+    const event = await Event.findActive();
+    if (!event) {
+      return res.status(200).json({
+        message:
+          "Aktuell werden keine Bestellungen entgegengenommen, da es kein aktives Event gibt.",
+        status: 200,
+      });
+    }
+    const orders = await Order.getPending(event._id.toString());
+    return res.status(200).json({ orders });
+  },
+};

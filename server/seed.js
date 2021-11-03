@@ -161,7 +161,7 @@ const seedDatabase = async () => {
     await connectToDatabase();
     const products = await seedProducts(productData);
     const events = await seedEvents(1);
-    const orders = await seedOrders(products, events, 50);
+    const orders = await seedOrders(products, events, 10);
     const admin = await seedAdmin();
     console.log("Database seeded.");
   } catch (error) {

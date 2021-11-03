@@ -1,7 +1,9 @@
 <template>
   <section>
     <base-title>Bestellungen</base-title>
-    <div class="orders"></div>
+    <div class="orders">
+      <div v-for="order in pendingOrders">{{ order._id }}</div>
+    </div>
   </section>
 </template>
 
