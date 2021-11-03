@@ -14,6 +14,22 @@ export default {
       name: "login",
       path: "login",
       component: LoginForm,
+      beforeEnter(to, from, next) {
+        fetch(`${process.env.VUE_APP_API}/account/login`, {
+          credentials: "include",
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res.status !== 200) {
+              next();
+            } else {
+              next({ name: "orders" });
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
     },
     {
       name: "registration",

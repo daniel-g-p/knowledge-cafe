@@ -18,8 +18,9 @@ export default {
       .then((res) => {
         if (res.status !== 200) {
           next({ name: "login" });
+        } else {
+          next();
         }
-        next();
       })
       .catch((error) => {
         console.log(error);
