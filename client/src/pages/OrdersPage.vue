@@ -1,6 +1,7 @@
 <template>
   <section>
     <base-title>Bestellungen</base-title>
+    <event-status></event-status>
     <transition-group name="orders-" tag="div" class="orders">
       <order-item
         v-for="order in pendingOrders"
@@ -22,9 +23,12 @@
 
 <script>
 import OrderItem from "../components/OrderItem.vue";
+import EventStatus from "../components/EventStatus.vue";
+
 export default {
   components: {
     OrderItem,
+    EventStatus,
   },
   data() {
     return {

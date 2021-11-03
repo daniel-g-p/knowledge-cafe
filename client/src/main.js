@@ -12,6 +12,7 @@ import BaseModal from "./base/BaseModal.vue";
 import BaseSelect from "./base/BaseSelect.vue";
 import BaseTextbox from "./base/BaseTextbox.vue";
 import BaseLink from "./base/BaseLink.vue";
+import BaseCornerButton from "./base/BaseCornerButton.vue";
 
 const app = createApp(App);
 
