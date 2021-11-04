@@ -83,9 +83,17 @@ export default {
     padding: 1.5rem;
     background-color: $color-white;
     color: $color-black;
+    width: 100%;
     min-width: 15rem;
     max-width: 22.5rem;
+    max-height: 100%;
+    overflow-y: scroll;
     transition: transform 0.25s ease;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   &__content {
     display: flex;

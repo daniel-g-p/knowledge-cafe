@@ -5,7 +5,7 @@ export default class Event {
   constructor() {
     this.title = "";
     this.start = new Date();
-    this.end = undefined;
+    this.end = null;
     this.stats = {
       revenue: 0,
       unitsSold: 0,
@@ -15,6 +15,11 @@ export default class Event {
   async create() {
     const collection = getDatabase().collection("events");
     return await collection.insertOne(this);
+  }
+  static async getAll() {
+    const collection = getDatabase().collection("events");
+    const query = { end: { $ne: null }};
+    return await collection.find(query).toArray();
   }
   static async findActive() {
     const collection = getDatabase().collection("events");

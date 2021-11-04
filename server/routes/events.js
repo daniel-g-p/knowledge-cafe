@@ -6,9 +6,10 @@ import controller from "../controllers/events.js";
 
 const router = Router();
 
-router.use(tryCatch(authorizeUser));
+router.use(authorizeUser);
 
-router.post("/open", controller.startEvent);
-router.post("/close", controller.closeEvent);
+router.get("/", tryCatch(controller.getEvents));
+router.post("/open", tryCatch(controller.startEvent));
+router.post("/close", tryCatch(controller.closeEvent));
 
 export default router;

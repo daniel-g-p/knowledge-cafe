@@ -3,6 +3,16 @@ import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 
 export default {
+  async getEvents(req, res, next) {
+    const events = await Event.getAll();
+    console.log(events);
+    return res.status(200).json({
+      events: events.sort((a, b) => {
+        return a.start.getTime() < b.start.getTime() ? 1 : -1;
+      }),
+      status: 200,
+    });
+  },
   async startEvent(req, res, next) {
     const existingEvent = await Event.findActive();
     if (existingEvent) {
@@ -25,7 +35,7 @@ export default {
         status: 400,
       });
     }
-    const eventId = activeEvent._id.toString()
+    const eventId = activeEvent._id.toString();
     const orders = await Order.findByEventId(eventId);
     if (orders.some((order) => !order.completed)) {
       return res.status(400).json({
