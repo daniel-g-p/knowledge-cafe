@@ -23,8 +23,7 @@ export default {
   },
   async cancelOrder(req, res, next) {
     const { orderId } = req.params;
-    const order = await Order.deleteById(orderId);
-    console.log(order);
+    await Order.deleteById(orderId);
     return res.status(200).json({ status: 200 });
   },
 };

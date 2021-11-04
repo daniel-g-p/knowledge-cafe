@@ -2,7 +2,7 @@
   <button
     v-if="type === 'button'"
     class="button"
-    :class="[colorClass, styleClass]"
+    :class="[colorClass, styleClass, activeClass]"
   >
     <div v-if="!loading" class="button__content"><slot></slot></div>
     <div v-else class="button__loader">
@@ -82,6 +82,9 @@ export default {
           return { "button--outline": true };
       }
     },
+    activeClass() {
+      return { "button--disabled": this.loading };
+    },
   },
 };
 </script>
@@ -98,7 +101,7 @@ export default {
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition: background-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
   &__content {
     transition: transform 0.25s ease;
   }
@@ -122,6 +125,10 @@ export default {
     &--3 {
       animation: loading-animation 1s ease-in-out 0.4s infinite;
     }
+  }
+  &--disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
   &--fill {
     &.button--gold {

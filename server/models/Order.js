@@ -32,6 +32,11 @@ export default class Order {
     const query = { _id: new ObjectId(orderId) };
     return await collection.deleteOne(query);
   }
+  static async findByEventId(eventId) {
+    const collection = getDatabase().collection("orders");
+    const query = { eventId };
+    return await collection.find(query).toArray();
+  }
   static async deleteAll() {
     const collection = getDatabase().collection("orders");
     return await collection.deleteMany({});

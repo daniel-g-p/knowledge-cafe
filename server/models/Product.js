@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { getDatabase } from "../utilities/database.js";
 
 export default class Product {
@@ -27,6 +28,12 @@ export default class Product {
       options.projection[key] = 1;
     }
     return await collection.find({}, options).toArray();
+  }
+  static async getTagById(productId) {
+    const collection = getDatabase().collection("products");
+    const query = { _id: new ObjectId(productId) };
+    const options = { projection: { tag: 1 } };
+    return await collection.findOne(query, options);
   }
   static async deleteAll() {
     const collection = getDatabase().collection("products");
