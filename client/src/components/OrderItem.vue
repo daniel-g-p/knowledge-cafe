@@ -13,7 +13,7 @@
       </div>
       <p v-if="comments" class="order__comments">{{ comments }}</p>
       <div class="order__footer">
-        <div class="order__warning">
+        <div v-if="paymentMethod === 'cash'" class="order__warning">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="order__warning-icon"

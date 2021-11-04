@@ -50,7 +50,7 @@ export default {
         startHours: start.getHours(),
         startMinutes: start.getMinutes(),
         endHours: end.getHours(),
-        endMinutes: start.getMinutes(),
+        endMinutes: end.getMinutes(),
       };
       ["startHours", "startMinutes", "endHours", "endMinutes"].forEach(
         (field) => {

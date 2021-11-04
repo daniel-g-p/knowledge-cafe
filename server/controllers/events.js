@@ -5,7 +5,6 @@ import Product from "../models/Product.js";
 export default {
   async getEvents(req, res, next) {
     const events = await Event.getAll();
-    console.log(events);
     return res.status(200).json({
       events: events.sort((a, b) => {
         return a.start.getTime() < b.start.getTime() ? 1 : -1;
