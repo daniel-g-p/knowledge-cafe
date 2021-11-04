@@ -4,6 +4,7 @@
     <order-controls
       :event-active="eventActive"
       @event-error="openModal"
+      @event-success="confirmEventEnd"
     ></order-controls>
     <orders-page-info
       :event-active="eventActive"
@@ -22,7 +23,11 @@
         @completion-failed="openModal"
       ></order-item>
     </transition-group>
-    <base-modal title="Fehler" :open="modal.open" @close-modal="closeModal">
+    <base-modal
+      :title="modal.title"
+      :open="modal.open"
+      @close-modal="closeModal"
+    >
       {{ modal.message }}
     </base-modal>
   </section>
@@ -41,7 +46,7 @@ export default {
   },
   data() {
     return {
-      modal: { open: false, message: "" },
+      modal: { open: false, title: "Fehler", message: "" },
     };
   },
   computed: {
@@ -51,25 +56,24 @@ export default {
     eventActive() {
       return this.$store.getters["orders/eventStatus"] === "active";
     },
-    infoText() {
-      if (!this.eventActive) {
-        return "Bitten gebe den Verkauf frei, um Bestellungen entgegennehmen zu könnnen.";
-      } else if (!this.pendingOrders.length) {
-      }
-    },
   },
   methods: {
     fetchOrders() {
       this.$store.dispatch("orders/fetchOrders");
     },
-    openModal(message) {
-      this.modal.message =
-        message ||
-        "Die Bestellung konnte nicht abgeschlossen werden, bitte versuche es erneut.";
+    openModal(message, title = "Fehler") {
+      this.modal.message = message;
+      this.modal.title = title;
       this.modal.open = true;
     },
     closeModal() {
       this.modal.open = false;
+    },
+    confirmEventEnd(eventId) {
+      this.openModal(
+        "Das Event wurde erfolgreich abgeschlossen und gespeichert.",
+        "Glückwunsch!"
+      );
     },
   },
   mounted() {

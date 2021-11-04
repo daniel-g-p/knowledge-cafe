@@ -37,13 +37,13 @@
 
 <script>
 export default {
-  emits: ["event-error"],
   props: {
     eventActive: {
       type: Boolean,
       required: true,
     },
   },
+  emits: ["event-success", "event-error"],
   data() {
     return {
       modalOpen: false,
@@ -75,6 +75,7 @@ export default {
     toggleModal() {
       this.modalOpen = !this.modalOpen;
       this.eventNameError = false;
+      this.eventName = "";
     },
     toggleStatus() {
       this.toggleModal();
@@ -87,7 +88,6 @@ export default {
         this.eventNameError = true;
         return;
       }
-      this.toggleModal();
       const url = `${process.env.VUE_APP_API}/events/${
         this.eventActive ? "close" : "open"
       }`;
@@ -99,10 +99,16 @@ export default {
         options.headers = { "Content-Type": "application/json" };
         options.body = JSON.stringify({ eventName: this.eventName });
       }
+      this.buttonLoading = true;
       fetch(url, options)
         .then((res) => res.json())
         .then((res) => {
+          this.toggleModal();
+          this.buttonLoading = false;
           if (res.status === 200) {
+            if (this.eventActive) {
+              this.$emit("event-success", res.eventId);
+            }
             this.$store.dispatch("orders/toggleEventStatus", this.eventActive);
           } else {
             this.$emit("event-error", res.message);
