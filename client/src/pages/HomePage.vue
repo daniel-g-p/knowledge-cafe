@@ -4,7 +4,7 @@
     <div class="home__content">
       <icon-logo color="color" :height="6"></icon-logo>
       <h1 class="home__title">Willkommen im Knowledge Café!</h1>
-      <base-button color="gold" type="link" :link="buttonLink">
+      <base-button color="gold" type="link" :link="shopLink">
         Zur Karte
       </base-button>
     </div>
@@ -15,7 +15,8 @@
 export default {
   data() {
     return {
-      buttonLink: { name: "shop" },
+      shopLink: { name: "shop" },
+      loginLink: { name: "login" },
     };
   },
 };

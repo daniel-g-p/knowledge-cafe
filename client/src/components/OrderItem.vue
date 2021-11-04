@@ -106,7 +106,7 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (res.status !== 200) {
-            this.$emit("completion-failed", this.id);
+            this.$emit("completion-failed");
           } else {
             this.$store.dispatch("orders/completeOrder", this.id);
           }

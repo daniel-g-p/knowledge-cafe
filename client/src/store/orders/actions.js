@@ -5,7 +5,6 @@ export default {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("REQUEST");
         const { orders, event } = res;
         context.commit("setEventStatus", event ? "active" : "inactive");
         context.commit("fetchOrders", event ? orders : []);

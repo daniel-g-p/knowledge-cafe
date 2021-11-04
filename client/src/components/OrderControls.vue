@@ -1,44 +1,58 @@
 <template>
-  <aside class="status">
-    <div class="status__content">
-      <div class="status__text">
-        Verkaufsstatus: <span>{{ eventActive ? "Aktiv" : "Inaktiv" }}</span>
+  <div>
+    <aside class="status">
+      <div class="status__content">
+        <div class="status__text">
+          Verkaufsstatus: <span>{{ eventActive ? "Aktiv" : "Inaktiv" }}</span>
+        </div>
+        <div class="status__toggle" :class="toggleClass" @click="toggleStatus">
+          <div></div>
+        </div>
       </div>
-      <div class="status__toggle" :class="toggleClass" @click="toggleStatus">
-        <div></div>
-      </div>
-    </div>
-    <base-button v-if="eventActive" type="link" :link="newOrderLink"
-      >Neue Bestellung</base-button
+      <base-button v-if="eventActive" type="link" :link="newOrderLink"
+        >Neue Bestellung</base-button
+      >
+      <div class="status__separator"></div>
+    </aside>
+    <base-modal
+      title="Bestätigung"
+      :open="modalOpen"
+      @close-modal="toggleModal"
     >
-    <div class="status__separator"></div>
-  </aside>
-  <base-modal title="Bestätigung" :open="modalOpen" @close-modal="toggleModal">
-    <p>
-      Sicher, dass du den Verkauf
-      {{ eventActive ? "beenden" : "freigeben" }} möchtest?
-    </p>
-    <base-button :loading="buttonLoading" @click="confirmToggle">{{
-      eventActive ? "Beenden" : "Freigeben"
-    }}</base-button>
-  </base-modal>
+      <p>{{ modalText }}</p>
+      <base-textbox
+        v-if="eventActive"
+        label="Name"
+        id="eventName"
+        :error="eventNameError"
+        v-model="eventName"
+        @remove-error="removeInputError"
+      ></base-textbox>
+      <base-button :loading="buttonLoading" @click="confirmToggle">{{
+        modalButtonText
+      }}</base-button>
+    </base-modal>
+  </div>
 </template>
 
 <script>
 export default {
+  emits: ["event-error"],
+  props: {
+    eventActive: {
+      type: Boolean,
+      required: true,
+    },
+  },
   data() {
     return {
       modalOpen: false,
       buttonLoading: false,
+      eventName: "",
+      eventNameError: false,
     };
   },
   computed: {
-    eventStatus() {
-      return this.$store.getters["orders/eventStatus"];
-    },
-    eventActive() {
-      return this.eventStatus === "active";
-    },
     toggleClass() {
       return {
         "status__toggle--active": this.eventActive,
@@ -48,27 +62,50 @@ export default {
     newOrderLink() {
       return { name: "shop" };
     },
+    modalText() {
+      return this.eventActive
+        ? "Unter welchem Namen möchtest du diesen Verkauf speichern?"
+        : "Sicher, dass du den Verkauf freigeben möchtest?";
+    },
+    modalButtonText() {
+      return this.eventActive ? "Speichern" : "Freigeben";
+    },
   },
   methods: {
     toggleModal() {
       this.modalOpen = !this.modalOpen;
+      this.eventNameError = false;
     },
     toggleStatus() {
       this.toggleModal();
     },
+    removeInputError() {
+      this.eventNameError = false;
+    },
     confirmToggle() {
+      if (this.eventActive && !this.eventName) {
+        this.eventNameError = true;
+        return;
+      }
       this.toggleModal();
       const url = `${process.env.VUE_APP_API}/events/${
         this.eventActive ? "close" : "open"
       }`;
-      const options = { method: "POST", credentials: "include" };
+      const options = {
+        method: "POST",
+        credentials: "include",
+      };
+      if (this.eventActive) {
+        options.headers = { "Content-Type": "application/json" };
+        options.body = JSON.stringify({ eventName: this.eventName });
+      }
       fetch(url, options)
         .then((res) => res.json())
         .then((res) => {
           if (res.status === 200) {
             this.$store.dispatch("orders/toggleEventStatus", this.eventActive);
           } else {
-            console.log(res);
+            this.$emit("event-error", res.message);
           }
         })
         .catch((error) => {

@@ -13,4 +13,16 @@ export default {
     await new Event().create();
     return res.status(200).json({ status: 200 });
   },
+  async closeEvent(req, res, next) {
+    const { eventName } = req.body;
+    const event = await Event.findActive();
+    if (!event) {
+      return res.status(400).json({
+        message:
+          "Es konnte kein aktives Event gefunden werden, bitte versuche es erneut.",
+        status: 400,
+      });
+    }
+    return res.status(200).json({ status: 200 });
+  },
 };
