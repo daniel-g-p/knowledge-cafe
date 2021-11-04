@@ -133,7 +133,8 @@ const seedOrders = async (products, events, ordersPerEvent) => {
           return result + item.price * item.quantity;
         }, 0)
       );
-      await order.create();
+      const { insertedId } = await order.create();
+      await Order.completeById(insertedId.toString());
       orders.push(order);
     }
   }
