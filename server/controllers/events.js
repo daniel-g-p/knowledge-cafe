@@ -36,6 +36,13 @@ export default {
     }
     const eventId = activeEvent._id.toString();
     const orders = await Order.findByEventId(eventId);
+    if (!orders.length) {
+      await Event.deleteById(eventId);
+      return res.status(200).json({
+        message: "Es wurden keine Bestellungen während des Events registriert.",
+        status: 200,
+      });
+    }
     if (orders.some((order) => !order.completed)) {
       return res.status(400).json({
         message: "Es gibt noch Bestellungen, die abgeschlossen werden müssen.",
@@ -43,7 +50,8 @@ export default {
       });
     }
     const productTags = await helpers.computeProductTags(orders);
-    const eventStats = helpers.computeStats(orders, productTags);
+    const eventStats = helpers.computeEventStats(orders, productTags);
+    await helpers.computeProductStats(orders);
     await Event.closeEvent(eventId, eventName, eventStats);
     return res.status(200).json({ eventId, status: 200 });
   },
@@ -62,7 +70,7 @@ const helpers = {
     }
     return productTags;
   },
-  computeStats(orders, productTags) {
+  computeEventStats(orders, productTags) {
     const revenue = orders.reduce((result, order) => {
       return result + order.total;
     }, 0);
@@ -86,5 +94,42 @@ const helpers = {
       unitsSold,
       products,
     };
+  },
+  async computeProductStats(orders) {
+    const products = [];
+    for (let order of orders) {
+      for (let item of order.items) {
+        const itemId = item.id.toString();
+        const index = products.findIndex((p) => p.id === itemId);
+        if (index !== -1) {
+          products[index].revenue =
+            products[index].revenue + item.quantity * products[index].price;
+          products[index].unitsSold += item.quantity;
+          if (item.variation) {
+            products[index].variations[item.variation]++;
+          }
+        } else {
+          const data = await Product.getById(itemId, ["price", "stats"]);
+          const { price, stats } = data;
+          const { revenue, unitsSold, variations } = stats;
+          const newProduct = {
+            id: itemId,
+            price,
+            revenue: revenue + item.quantity * price,
+            unitsSold: unitsSold + item.quantity,
+            variations,
+          };
+          if (item.variation) {
+            newProduct.variations[item.variation] += item.quantity;
+          }
+          products.push(newProduct);
+        }
+      }
+    }
+    for (let product of products) {
+      const { revenue, unitsSold, variations } = product;
+      const stats = { revenue, unitsSold, variations };
+      await Product.updateById(product.id, { stats });
+    }
   },
 };

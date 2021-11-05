@@ -6,7 +6,7 @@ import controller from "../controllers/orders.js";
 
 const router = Router();
 
-router.use(tryCatch(authorizeUser));
+router.use(authorizeUser);
 
 router.get("/pending", tryCatch(controller.getPendingOrders));
 

@@ -18,7 +18,7 @@ export default class Event {
   }
   static async getAll() {
     const collection = getDatabase().collection("events");
-    const query = { end: { $ne: null }};
+    const query = { end: { $ne: null } };
     return await collection.find(query).toArray();
   }
   static async findActive() {
@@ -30,6 +30,10 @@ export default class Event {
     const filter = { _id: new ObjectId(eventId) };
     const update = { $set: { title, stats, end: new Date() } };
     return await collection.updateOne(filter, update);
+  }
+  static async deleteById(eventId) {
+    const collection = getDatabase().collection("events");
+    return await collection.deleteOne({ _id: new ObjectId(eventId) });
   }
   static async deleteAll() {
     const collection = getDatabase().collection("events");

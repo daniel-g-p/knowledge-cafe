@@ -11,10 +11,11 @@ export default class Product {
     this.stats = {
       revenue: 0,
       unitsSold: 0,
-      variations: variations.map((item) => {
-        return { name: item, sold: 0 };
-      }),
+      variations: {},
     };
+    for (let variation of variations) {
+      this.stats.variations[variation] = 0;
+    }
     this.timestamp = new Date();
   }
   async create() {
@@ -29,11 +30,26 @@ export default class Product {
     }
     return await collection.find({}, options).toArray();
   }
+  static async getById(productId, keys = []) {
+    const collection = getDatabase().collection("products");
+    const query = { _id: new ObjectId(productId) };
+    const options = { projection: {} };
+    for (let key of keys) {
+      options.projection[key] = 1;
+    }
+    return await collection.findOne(query, options);
+  }
   static async getTagById(productId) {
     const collection = getDatabase().collection("products");
     const query = { _id: new ObjectId(productId) };
     const options = { projection: { tag: 1 } };
     return await collection.findOne(query, options);
+  }
+  static async updateById(productId, data) {
+    const collection = getDatabase().collection("products");
+    const filter = { _id: new ObjectId(productId) };
+    const update = { $set: data };
+    return await collection.updateOne(filter, update);
   }
   static async deleteAll() {
     const collection = getDatabase().collection("products");

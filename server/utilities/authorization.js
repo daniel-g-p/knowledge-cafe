@@ -1,7 +1,8 @@
 import { verifyToken } from "./authentication.js";
+import { tryCatch } from "./error-handling.js";
 import User from "../models/User.js";
 
-export const authorizeUser = async (req, res, next) => {
+export const authorizeUser = tryCatch(async (req, res, next) => {
   const { userId } = verifyToken(req.signedCookies.userId);
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized", status: 401 });
@@ -14,4 +15,4 @@ export const authorizeUser = async (req, res, next) => {
       .json({ message: "Unauthorized", status: 401 });
   }
   next();
-};
+});
