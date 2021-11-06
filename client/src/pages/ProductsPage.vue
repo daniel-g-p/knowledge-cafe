@@ -1,7 +1,7 @@
 <template>
   <section>
     <base-title>Produkte</base-title>
-    <div class="products">
+    <transition-group tag="div" name="products-" class="products">
       <products-item
         v-for="product in products"
         :key="product._id"
@@ -9,7 +9,7 @@
         :name="product.name"
         @select-item="selectItem"
       ></products-item>
-    </div>
+    </transition-group>
     <base-modal
       :open="viewMode ? true : false"
       :title="modalTitle"
@@ -33,7 +33,15 @@
         :tag="activeProduct.tag"
         :variations="activeProduct.variations"
         @confirm-edits="confirmEdits"
+        @edits-failed="emitError"
       ></products-item-form>
+      <products-item-delete
+        v-else-if="viewMode === 'delete'"
+        :id="activeProduct.id"
+        :name="activeProduct.name"
+        @confirm-deletion="deleteProduct"
+        @deletion-failed="emitError"
+      ></products-item-delete>
       <p v-else-if="viewMode === 'error'">{{ errorMessage }}</p>
     </base-modal>
   </section>
@@ -43,12 +51,14 @@
 import ProductsItem from "../components/ProductsItem.vue";
 import ProductsItemDetails from "../components/ProductsItemDetails.vue";
 import ProductsItemForm from "../components/ProductsItemForm.vue";
+import ProductsItemDelete from "../components/ProductsItemDelete.vue";
 
 export default {
   components: {
     ProductsItem,
     ProductsItemDetails,
     ProductsItemForm,
+    ProductsItemDelete,
   },
   data() {
     return {
@@ -117,6 +127,16 @@ export default {
         this.selectItem(productId, "view");
       }, 500);
     },
+    deleteProduct(productId) {
+      this.closeModal();
+      this.$store.dispatch("products/deleteProduct", productId);
+    },
+    emitError(message) {
+      this.errorMessage =
+        message ||
+        "Ein Fehler ist aufgetreten, bitte versuche es später erneut.";
+      this.viewMode = "error";
+    },
   },
   mounted() {
     if (!this.products) {
@@ -131,5 +151,14 @@ export default {
 .products {
   display: grid;
   gap: 1rem;
+  &--leave-active {
+    transition: opacity 0.5s ease;
+  }
+  &--leave-from {
+    opacity: 1;
+  }
+  &--leave-to {
+    opacity: 0;
+  }
 }
 </style>

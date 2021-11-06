@@ -19,4 +19,9 @@ export default {
     await Product.updateById(productId, data);
     return res.status(200).json({ status: 200 });
   },
+  async deleteProduct(req, res, next) {
+    const { productId } = req.params;
+    await Product.deleteById(productId);
+    return res.status(200).json({ status: 200 });
+  },
 };

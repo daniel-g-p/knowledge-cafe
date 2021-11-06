@@ -140,7 +140,7 @@ export default {
           if (res.status === 200) {
             this.$emit("confirm-edits", this.id, formData);
           } else {
-            this.$emit("edits-failed");
+            this.$emit("edits-failed", res.message);
           }
         })
         .catch((error) => {

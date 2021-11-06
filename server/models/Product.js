@@ -51,6 +51,11 @@ export default class Product {
     const update = { $set: data };
     return await collection.updateOne(filter, update);
   }
+  static async deleteById(productId) {
+    const collection = getDatabase().collection("products");
+    const query = { _id: new ObjectId(productId) };
+    return await collection.deleteOne(query);
+  }
   static async deleteAll() {
     const collection = getDatabase().collection("products");
     return await collection.deleteMany({});

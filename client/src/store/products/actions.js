@@ -14,4 +14,7 @@ export default {
   editProduct(context, payload) {
     context.commit("editProduct", payload);
   },
+  deleteProduct(context, productId) {
+    context.commit("deleteProduct", productId);
+  },
 };

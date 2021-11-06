@@ -11,5 +11,6 @@ router.use(authorizeUser);
 
 router.get("/", tryCatch(controller.getProducts));
 router.put("/:productId", tryCatch(controller.editProduct));
+router.delete("/:productId", tryCatch(controller.deleteProduct));
 
 export default router;
