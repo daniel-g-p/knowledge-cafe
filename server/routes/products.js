@@ -10,5 +10,6 @@ const router = Router();
 router.use(authorizeUser);
 
 router.get("/", tryCatch(controller.getProducts));
+router.put("/:productId", tryCatch(controller.editProduct));
 
 export default router;

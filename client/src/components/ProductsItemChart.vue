@@ -1,17 +1,20 @@
 <template>
   <base-info label="Sortenverteilung">
-    <div class="chart__labels">
-      <div v-for="(variation, index) in variations" class="chart__label">
-        <div
-          class="chart__color"
-          :style="{ 'background-color': colors[index] }"
-        ></div>
-        <div class="chart__text">
-          {{ variation }} ({{ formattedPercentages[variation] }})
+    <div v-if="dataAvailable">
+      <div class="chart__labels">
+        <div v-for="(variation, index) in variations" class="chart__label">
+          <div
+            class="chart__color"
+            :style="{ 'background-color': colors[index] }"
+          ></div>
+          <div class="chart__text">
+            {{ variation }} ({{ formattedPercentages[variation] }})
+          </div>
         </div>
       </div>
+      <div class="chart" :style="chartGradient"></div>
     </div>
-    <div class="chart" :style="chartGradient"></div>
+    <p v-else>N/A</p>
   </base-info>
 </template>
 
@@ -31,6 +34,11 @@ export default {
   computed: {
     variations() {
       return Object.keys(this.stats);
+    },
+    dataAvailable() {
+      return this.variations.some((variation) => {
+        return this.stats[variation] > 0;
+      });
     },
     totalUnits() {
       return this.variations.reduce((result, variation) => {

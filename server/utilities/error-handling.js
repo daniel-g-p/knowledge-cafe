@@ -15,5 +15,9 @@ export const errorHandler = (error, req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     console.log(error);
   }
-  return res.status(500).json({ message: error.message });
+  return res
+    .status(500)
+    .json({
+      message: "Ein Fehler ist aufgetreten, bitte versuche es später erneut.",
+    });
 };

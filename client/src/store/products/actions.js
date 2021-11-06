@@ -11,4 +11,7 @@ export default {
         console.log(error);
       });
   },
+  editProduct(context, payload) {
+    context.commit("editProduct", payload);
+  },
 };

@@ -23,19 +23,32 @@
         :tag="activeProduct.tag"
         :variations="activeProduct.variations"
         :stats="activeProduct.stats"
-      ></products-item-details
-    ></base-modal>
+      ></products-item-details>
+      <products-item-form
+        v-else-if="viewMode === 'edit'"
+        :id="activeProduct.id"
+        :name="activeProduct.name"
+        :description="activeProduct.description"
+        :price="activeProduct.price"
+        :tag="activeProduct.tag"
+        :variations="activeProduct.variations"
+        @confirm-edits="confirmEdits"
+      ></products-item-form>
+      <p v-else-if="viewMode === 'error'">{{ errorMessage }}</p>
+    </base-modal>
   </section>
 </template>
 
 <script>
 import ProductsItem from "../components/ProductsItem.vue";
 import ProductsItemDetails from "../components/ProductsItemDetails.vue";
+import ProductsItemForm from "../components/ProductsItemForm.vue";
 
 export default {
   components: {
     ProductsItem,
     ProductsItemDetails,
+    ProductsItemForm,
   },
   data() {
     return {
@@ -49,6 +62,7 @@ export default {
         variations: [],
         stats: {},
       },
+      errorMessage: "",
     };
   },
   computed: {
@@ -58,19 +72,22 @@ export default {
     modalTitle() {
       switch (this.viewMode) {
         case "view": {
-          return "Info";
+          return "Produktinfo";
         }
-        case "view": {
-          return "Info";
+        case "edit": {
+          return "Bearbeiten";
         }
-        case "view": {
-          return "Info";
+        case "delete": {
+          return "Produkt löschen?";
+        }
+        case "error": {
+          return "Fehler";
         }
       }
     },
   },
   methods: {
-    viewItem(itemId) {
+    selectItem(itemId, mode) {
       const item = this.products.find((product) => product._id === itemId);
       this.activeProduct.id = item._id;
       this.activeProduct.name = item.name;
@@ -79,24 +96,9 @@ export default {
       this.activeProduct.tag = item.tag;
       this.activeProduct.variations = item.variations;
       this.activeProduct.stats = item.stats;
-      this.viewMode = "view";
+      this.viewMode = mode;
     },
-    editItem(itemId) {},
-    deleteItem(itemId) {},
-    selectItem(itemId, mode) {
-      switch (mode) {
-        case "view": {
-          return this.viewItem(itemId);
-        }
-        case "edit": {
-          return this.editItem(itemId);
-        }
-        case "delete": {
-          return this.deleteItem(itemId);
-        }
-      }
-    },
-    closeModal(mode) {
+    closeModal() {
       this.viewMode = "";
       this.activeProduct = {
         id: "",
@@ -107,6 +109,13 @@ export default {
         variations: [],
         stats: {},
       };
+    },
+    confirmEdits(productId, productData) {
+      this.closeModal();
+      this.$store.dispatch("products/editProduct", { productId, productData });
+      setTimeout(() => {
+        this.selectItem(productId, "view");
+      }, 500);
     },
   },
   mounted() {

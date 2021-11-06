@@ -17,6 +17,9 @@
       :value="modelValue"
       @input="setValue"
     />
+    <p v-if="error && errorMessage.length" class="textbox__error">
+      {{ errorMessage }}
+    </p>
   </div>
 </template>
 
@@ -26,6 +29,10 @@ export default {
     error: {
       type: Boolean,
       default: false,
+    },
+    errorMessage: {
+      type: String,
+      default: "",
     },
     label: {
       type: String,
@@ -98,6 +105,11 @@ export default {
       resize: none;
       height: 4.5rem;
     }
+  }
+  &__error {
+    color: $color-red;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
   }
 }
 

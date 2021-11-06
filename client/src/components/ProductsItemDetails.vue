@@ -1,16 +1,14 @@
 <template>
-  <div class="details">
-    <base-info label="Kürzel">{{ upperCaseTag }}</base-info>
-    <base-info label="Beschreibung">{{ description }}</base-info>
-    <base-info label="Verkaufspreis">{{ formattedPrice }}</base-info>
-    <base-info label="Verkaufte Einheiten">{{ stats.unitsSold }}</base-info>
-    <base-info label="Gesamteinnahmen">{{ formattedRevenue }}</base-info>
-    <products-item-chart
-      v-if="variations.length"
-      :variations="variations"
-      :stats="stats.variations"
-    ></products-item-chart>
-  </div>
+  <base-info label="Kürzel">{{ upperCaseTag }}</base-info>
+  <base-info label="Beschreibung">{{ description }}</base-info>
+  <base-info label="Verkaufspreis">{{ formattedPrice }}</base-info>
+  <base-info label="Verkaufte Einheiten">{{ stats.unitsSold }}</base-info>
+  <base-info label="Gesamteinnahmen">{{ formattedRevenue }}</base-info>
+  <products-item-chart
+    v-if="variations.length"
+    :variations="variations"
+    :stats="stats.variations"
+  ></products-item-chart>
 </template>
 
 <script>
@@ -69,12 +67,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@use "../styles/index.scss" as *;
-.details {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-</style>
