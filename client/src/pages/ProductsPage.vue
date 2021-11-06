@@ -10,16 +10,21 @@
         @select-item="selectItem"
       ></products-item>
     </div>
-    <products-item-details
-      :open="viewMode === 'view'"
-      :id="activeProduct.id"
-      :name="activeProduct.name"
-      :description="activeProduct.description"
-      :price="activeProduct.price"
-      :tag="activeProduct.tag"
-      :variations="activeProduct.variations"
-      :stats="activeProduct.stats"
-    ></products-item-details>
+    <base-modal
+      :open="viewMode ? true : false"
+      :title="modalTitle"
+      @close-modal="closeModal"
+    >
+      <products-item-details
+        v-if="viewMode === 'view'"
+        :name="activeProduct.name"
+        :description="activeProduct.description"
+        :price="activeProduct.price"
+        :tag="activeProduct.tag"
+        :variations="activeProduct.variations"
+        :stats="activeProduct.stats"
+      ></products-item-details
+    ></base-modal>
   </section>
 </template>
 
@@ -49,6 +54,19 @@ export default {
   computed: {
     products() {
       return this.$store.getters["products/productList"];
+    },
+    modalTitle() {
+      switch (this.viewMode) {
+        case "view": {
+          return "Info";
+        }
+        case "view": {
+          return "Info";
+        }
+        case "view": {
+          return "Info";
+        }
+      }
     },
   },
   methods: {
@@ -80,6 +98,15 @@ export default {
     },
     closeModal(mode) {
       this.viewMode = "";
+      this.activeProduct = {
+        id: "",
+        name: "",
+        description: "",
+        price: 0,
+        tag: "",
+        variations: [],
+        stats: {},
+      };
     },
   },
   mounted() {

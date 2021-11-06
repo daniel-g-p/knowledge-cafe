@@ -67,9 +67,6 @@ export default {
       return summary;
     },
   },
-  mounted() {
-    console.log(this.chartGradient);
-  },
 };
 </script>
 

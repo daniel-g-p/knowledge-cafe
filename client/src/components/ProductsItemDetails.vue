@@ -1,5 +1,5 @@
 <template>
-  <base-modal :open="open" :title="name">
+  <div class="details">
     <base-info label="Kürzel">{{ upperCaseTag }}</base-info>
     <base-info label="Beschreibung">{{ description }}</base-info>
     <base-info label="Verkaufspreis">{{ formattedPrice }}</base-info>
@@ -10,7 +10,7 @@
       :variations="variations"
       :stats="stats.variations"
     ></products-item-chart>
-  </base-modal>
+  </div>
 </template>
 
 <script>
@@ -21,14 +21,6 @@ export default {
     ProductsItemChart,
   },
   props: {
-    open: {
-      type: Boolean,
-      required: true,
-    },
-    id: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
@@ -54,6 +46,7 @@ export default {
       required: true,
     },
   },
+  emits: ["close-modal"],
   computed: {
     upperCaseTag() {
       return this.tag.toUpperCase();
@@ -69,5 +62,19 @@ export default {
       return `€${multiple.slice(0, length - 2)},${multiple.slice(length - 2)}`;
     },
   },
+  methods: {
+    closeModal() {
+      this.$emit("close-modal");
+    },
+  },
 };
 </script>
+
+<style lang="scss" scoped>
+@use "../styles/index.scss" as *;
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+</style>
