@@ -12,4 +12,9 @@ export default {
     await User.updateById(userId, { role });
     return res.status(200).json({ ok: true });
   },
+  async deleteMember(req, res, next) {
+    const { userId } = req.params;
+    await User.deleteById(userId);
+    return res.status(200).json({ ok: true });
+  },
 };

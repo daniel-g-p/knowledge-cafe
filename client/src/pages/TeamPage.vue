@@ -1,7 +1,7 @@
 <template>
   <section class="team">
     <base-title>Team</base-title>
-    <div class="team__list">
+    <transition-group tag="div" name="team__member-" class="team__list">
       <team-member
         v-for="member in teamMembers"
         :key="member._id"
@@ -9,7 +9,7 @@
         :name="member.name"
         @select-member="selectTeamMember"
       ></team-member>
-    </div>
+    </transition-group>
     <base-modal
       :open="viewMode ? true : false"
       :title="modalTitle"
@@ -23,11 +23,17 @@
         :timestamp="active.timestamp"
       ></team-member-details>
       <team-member-edit
-        v-if="viewMode === 'edit'"
+        v-else-if="viewMode === 'edit'"
         :id="active.id"
         :role="active.role"
         @form-success="updateRole"
       ></team-member-edit>
+      <team-member-delete
+        v-else-if="viewMode === 'delete'"
+        :id="active.id"
+        :name="active.name"
+        @form-success="closeModal"
+      ></team-member-delete>
     </base-modal>
   </section>
 </template>
@@ -36,12 +42,14 @@
 import TeamMember from "../components/TeamMember.vue";
 import TeamMemberDetails from "../components/TeamMemberDetails.vue";
 import TeamMemberEdit from "../components/TeamMemberEdit.vue";
+import TeamMemberDelete from "../components/TeamMemberDelete.vue";
 
 export default {
   components: {
     TeamMember,
     TeamMemberDetails,
     TeamMemberEdit,
+    TeamMemberDelete,
   },
   data() {
     return {
@@ -115,6 +123,17 @@ export default {
   &__list {
     display: grid;
     gap: 1rem;
+  }
+  &__member {
+    &--leave-active {
+      transition: opacity 0.5s ease;
+    }
+    &--leave-from {
+      opacity: 1;
+    }
+    &--leave-to {
+      opacity: 0;
+    }
   }
 }
 </style>

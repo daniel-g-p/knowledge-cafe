@@ -18,4 +18,7 @@ export default {
   updateRole(context, payload) {
     context.commit("updateRole", payload);
   },
+  removeMember(context, payload) {
+    context.commit("removeMember", payload);
+  },
 };

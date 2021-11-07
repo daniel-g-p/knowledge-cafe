@@ -12,5 +12,6 @@ router.use(authorizeUser);
 
 router.get("/", tryCatch(controller.getTeamMembers));
 router.put("/set-role/:userId", tryCatch(controller.setRole));
+router.delete("/:userId", tryCatch(controller.deleteMember));
 
 export default router;

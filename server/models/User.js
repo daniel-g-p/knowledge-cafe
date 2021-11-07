@@ -64,6 +64,10 @@ export default class User {
     const update = { $set: data };
     return await collection.updateOne(query, update);
   }
+  static async deleteById(userId) {
+    const collection = getDatabase().collection("users");
+    return await collection.deleteOne({ _id: new ObjectId(userId) });
+  }
   static async deleteAll() {
     const collection = getDatabase().collection("users");
     return await collection.deleteMany({});
