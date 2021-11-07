@@ -13,6 +13,7 @@ export default class User {
       secret: token,
       expires: new Date().getTime() + 1000 * 60 * 60 * 24,
     };
+    this.verified = false;
     this.timestamp = new Date();
   }
   async create() {
@@ -28,9 +29,19 @@ export default class User {
         username,
         password,
         token: { secret: "", expires: null },
+        verified: true,
       },
     };
     return await collection.updateOne(filter, update);
+  }
+  static async findVerified(projectionFields = []) {
+    const collection = getDatabase().collection("users");
+    const query = { verified: true };
+    const options = { projection: {} };
+    for (let field of projectionFields) {
+      options.projection[field] = 1;
+    }
+    return await collection.find(query, options).toArray();
   }
   static async findById(userId, fields = ["_id"]) {
     const collection = getDatabase().collection("users");

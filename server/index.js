@@ -6,14 +6,12 @@ import cookieParser from "cookie-parser";
 import { connectToDatabase } from "./utilities/database.js";
 import { errorHandler } from "./utilities/error-handling.js";
 
-import rootRouter from "./routes/root.js";
 import shopRouter from "./routes/shop.js";
 import accountRouter from "./routes/account.js";
 import ordersRouter from "./routes/orders.js";
 import eventsRouter from "./routes/events.js";
 import productsRouter from "./routes/products.js";
 import teamRouter from "./routes/team.js";
-import settingsRouter from "./routes/settings.js";
 
 dotenv.config();
 
@@ -23,14 +21,12 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));
 
-app.use("/", rootRouter);
 app.use("/shop", shopRouter);
 app.use("/account", accountRouter);
 app.use("/orders", ordersRouter);
 app.use("/events", eventsRouter);
 app.use("/products", productsRouter);
 app.use("/team", teamRouter);
-app.use("/settings", settingsRouter);
 
 app.use(errorHandler);
 
