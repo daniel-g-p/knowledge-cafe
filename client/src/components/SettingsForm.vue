@@ -24,7 +24,7 @@
       v-model="form.username"
       @remove-error="removeError('username')"
     ></base-textbox>
-    <base-button>Bestätigen</base-button>
+    <base-button :loading="buttonLoading">Bestätigen</base-button>
   </form>
 </template>
 
@@ -47,6 +47,7 @@ export default {
   emits: ["form-success", "form-failed"],
   data() {
     return {
+      buttonLoading: false,
       form: {
         name: "",
         email: "",
@@ -101,6 +102,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
+      this.buttonLoading = true;
       fetch(url, options)
         .then((res) => res.json())
         .then((res) => {
@@ -113,6 +115,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          this.buttonLoading = false;
         });
     },
   },

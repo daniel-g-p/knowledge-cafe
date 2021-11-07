@@ -76,3 +76,22 @@ export const userEditsSchema = (user) => {
     )
   );
 };
+
+export const changePasswordSchema = (data) => {
+  const passwordRegex =
+    /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[._\-!?@#$%^&+=])./;
+  return validate(
+    data,
+    condition(data.oldPassword, "Bitte gebe dein altes Passwort ein."),
+    condition(data.newPassword, "Bitte gebe ein neues Passwort ein."),
+    condition(
+      passwordRegex.test(data.newPassword),
+      "Dein Passwort muss mindestens 1 Großbuchstaben, 1 Kleinbuchstaben, 1 Zahl, und ein Sonderzeichen enthalten."
+    ),
+    condition(data.confirmPassword, "Bitte bestätige dein Passwort."),
+    condition(
+      data.confirmPassword === data.newPassword,
+      "Die Passwörter stimmen nicht überein."
+    )
+  );
+};

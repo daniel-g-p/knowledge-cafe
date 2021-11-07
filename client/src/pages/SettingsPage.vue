@@ -25,9 +25,14 @@
         :email="userData.email"
         :username="userData.username"
         @form-success="closeModal"
-        @form-failed="editFailed"
+        @form-failed="emitError"
       ></settings-form>
-      <p v-if="viewMode === 'error'" class="settings__error">
+      <settings-password-edit
+        v-else-if="viewMode === 'password'"
+        @form-failed="emitError"
+      ></settings-password-edit>
+      <settings-logout v-else-if="viewMode === 'logout'"></settings-logout>
+      <p v-else-if="viewMode === 'error'" class="settings__error">
         {{ modalError }}
       </p>
     </base-modal>
@@ -36,10 +41,14 @@
 
 <script>
 import SettingsForm from "../components/SettingsForm.vue";
+import SettingsPasswordEdit from "../components/SettingsPasswordEdit.vue";
+import SettingsLogout from "../components/SettingsLogout.vue";
 
 export default {
   components: {
     SettingsForm,
+    SettingsPasswordEdit,
+    SettingsLogout,
   },
   data() {
     return {
@@ -75,7 +84,7 @@ export default {
     closeModal() {
       this.viewMode = "";
     },
-    editFailed(message) {
+    emitError(message) {
       this.closeModal();
       setTimeout(() => {
         this.viewMode = "error";
