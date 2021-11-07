@@ -7,7 +7,6 @@ export default {
       .then((res) => {
         if (res.ok) {
           context.commit("fetchTeamMembers", res.team);
-          console.log(res);
         } else {
           console.log(res.message);
         }
@@ -15,5 +14,8 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+  },
+  updateRole(context, payload) {
+    context.commit("updateRole", payload);
   },
 };

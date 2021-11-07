@@ -11,5 +11,6 @@ const router = Router();
 router.use(authorizeUser);
 
 router.get("/", tryCatch(controller.getTeamMembers));
+router.put("/set-role/:userId", tryCatch(controller.setRole));
 
 export default router;

@@ -45,6 +45,11 @@ export default {
       required: true,
     },
   },
+  methods: {
+    select(mode) {
+      this.$emit("select-member", mode, this.id);
+    },
+  },
 };
 </script>
 
