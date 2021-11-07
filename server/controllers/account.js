@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { hashPassword, verifyPassword } from "../utilities/encryption.js";
-import { loginSchema } from "../utilities/validation.js";
+import { loginSchema, userEditsSchema } from "../utilities/validation.js";
 import User from "../models/User.js";
 import { signToken, verifyToken } from "../utilities/authentication.js";
 
@@ -61,5 +61,29 @@ export default {
     ]);
     console.log({ name, email, username, role });
     return res.status(200).json({ name, email, username, role, status: 200 });
+  },
+  async editUser(req, res, next) {
+    const { userId } = verifyToken(req.signedCookies.userId);
+    const { data, valid, message } = userEditsSchema(req.body);
+    if (!valid) {
+      return res.status(400).json({ message, status: 400 });
+    }
+    const existingUsername = await User.findByUser(data.username);
+    if (existingUsername && existingUsername._id.toString() !== userId) {
+      return res.status(400).json({
+        message: `Der Benutzername "${data.username}"" ist bereits vergeben.`,
+        status: 400,
+      });
+    }
+    const existingEmail = await User.findByUser(data.email);
+    if (existingEmail && existingEmail._id.toString() !== userId) {
+      return res.status(400).json({
+        message: `Es gibt bereits einen anderen Benutzer mit dieser Emailadresse.`,
+        status: 400,
+      });
+    }
+    console.log(data);
+    await User.updateById(userId, data);
+    return res.status(200).json({ status: 200 });
   },
 };

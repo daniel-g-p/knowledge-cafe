@@ -16,4 +16,7 @@ export default {
         console.log(error);
       });
   },
+  updateUserData(context, payload) {
+    context.commit("updateUserData", payload);
+  },
 };

@@ -6,11 +6,9 @@ import controller from "../controllers/account.js";
 
 const router = Router();
 
-router
-  .route("/login")
-  .get(tryCatch(controller.verifyLogin))
-  .post(tryCatch(controller.login));
-
+router.get("/login", tryCatch(controller.verifyLogin));
+router.post("/login", tryCatch(controller.login));
 router.get("/user", tryCatch(controller.getUserData));
+router.put("/user", tryCatch(controller.editUser));
 
 export default router;

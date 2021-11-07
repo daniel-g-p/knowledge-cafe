@@ -54,3 +54,25 @@ export const productSchema = (product) => {
     )
   );
 };
+
+export const userEditsSchema = (user) => {
+  const data = {
+    name: user.name.trim(),
+    email: user.email.toLowerCase().trim(),
+    username: user.username.toLowerCase().trim(),
+  };
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const usernameRegex = /^[a-zA-Z0-9._-]+$/;
+  return validate(
+    data,
+    condition(data.name, "Bitte gebe einen Namen ein."),
+    condition(
+      data.email && emailRegex.test(data.email),
+      "Bitte gebe eine gültige Emailadresse ein."
+    ),
+    condition(
+      data.username && usernameRegex.test(data.username),
+      "Bitte gebe einen gültigen Benutzernamen ein."
+    )
+  );
+};

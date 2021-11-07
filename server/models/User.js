@@ -47,6 +47,12 @@ export default class User {
     const options = { projection: { _id: 1, password: 1 } };
     return await collection.findOne(query, options);
   }
+  static async updateById(userId, data) {
+    const collection = getDatabase().collection("users");
+    const query = { _id: new ObjectId(userId) };
+    const update = { $set: data };
+    return await collection.updateOne(query, update);
+  }
   static async deleteAll() {
     const collection = getDatabase().collection("users");
     return await collection.deleteMany({});
