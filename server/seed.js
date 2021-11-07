@@ -135,11 +135,10 @@ const seedOrders = async (products, events, ordersPerEvent) => {
       );
       const { insertedId } = await order.create();
       await Order.completeById(insertedId.toString());
-      orders.push(order);
     }
   }
   console.log("Orders seeded.");
-  return orders;
+  return;
 };
 
 const seedAdmin = async () => {
@@ -157,13 +156,31 @@ const seedAdmin = async () => {
   return admin;
 };
 
+const seedUsers = async (userNames) => {
+  for (let name of userNames) {
+    const email = `${name}@knowledgecafe.de`;
+    let token = "";
+    for (let i = 0; i < 6; i++) {
+      token = `${token}${chance.integer({ min: 0, max: 9 })}`;
+    }
+    const user = await new User(email, token).create();
+    const userId = user.insertedId.toString();
+    const username = name.toLowerCase();
+    const password = `${name}.2021`;
+    const hash = await hashPassword(password);
+    await User.verify(userId, name, username, hash);
+  }
+  console.log("Users seeded.");
+};
+
 const seedDatabase = async () => {
   try {
     await connectToDatabase();
     const products = await seedProducts(productData);
     const events = await seedEvents(1);
-    const orders = await seedOrders(products, events, 50);
-    const admin = await seedAdmin();
+    await seedOrders(products, events, 50);
+    await seedAdmin();
+    await seedUsers(teamData);
     console.log("Database seeded.");
   } catch (error) {
     console.log(error);
