@@ -14,6 +14,7 @@
         :price="item.price"
         @select-product="toggleProduct"
       ></shop-item>
+      <p v-if="!shopItems.length">Es wurden keine Produkte gefunden.</p>
     </section>
     <shop-item-modal
       :open="activeId ? true : false"

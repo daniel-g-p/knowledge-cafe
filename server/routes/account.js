@@ -11,4 +11,6 @@ router
   .get(tryCatch(controller.verifyLogin))
   .post(tryCatch(controller.login));
 
+router.get("/user", tryCatch(controller.getUserData));
+
 export default router;

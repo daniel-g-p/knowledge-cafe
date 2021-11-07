@@ -3,9 +3,9 @@ import { ObjectId } from "mongodb";
 import { getDatabase } from "../utilities/database.js";
 
 export default class User {
-  constructor(email, token, status = "user") {
+  constructor(email, token, role = "user") {
     this.email = email;
-    this.status = status;
+    this.role = role;
     this.name = "";
     this.username = "";
     this.password = "";
@@ -32,10 +32,13 @@ export default class User {
     };
     return await collection.updateOne(filter, update);
   }
-  static async findById(userId) {
+  static async findById(userId, fields = ["_id"]) {
     const collection = getDatabase().collection("users");
     const query = { _id: new ObjectId(userId) };
-    const options = { projection: { _id: 1 } };
+    const options = { projection: {} };
+    for (let field of fields) {
+      options.projection[field] = 1;
+    }
     return await collection.findOne(query, options);
   }
   static async findByUser(user) {

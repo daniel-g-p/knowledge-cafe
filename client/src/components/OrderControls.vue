@@ -109,6 +109,9 @@ export default {
             if (this.eventActive) {
               this.$emit("event-success", res.eventId);
             }
+            if (this.eventActive) {
+              this.$store.dispatch("events/fetchEvents", this.eventActive);
+            }
             this.$store.dispatch("orders/toggleEventStatus", this.eventActive);
           } else {
             this.$emit("event-error", res.message);

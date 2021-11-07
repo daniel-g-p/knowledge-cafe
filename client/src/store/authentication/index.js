@@ -7,6 +7,10 @@ export default {
   state() {
     return {
       loggedIn: false,
+      isAdmin: false,
+      name: "",
+      email: "",
+      username: "",
     };
   },
   getters,

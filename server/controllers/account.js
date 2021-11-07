@@ -4,6 +4,8 @@ import { loginSchema } from "../utilities/validation.js";
 import User from "../models/User.js";
 import { signToken, verifyToken } from "../utilities/authentication.js";
 
+dotenv.config();
+
 export default {
   async login(req, res, next) {
     const { valid, message, data } = loginSchema(req.body);
@@ -47,6 +49,17 @@ export default {
         .clearCookie("userId")
         .json({ message: "Unauthorized", status: 401 });
     }
-    return res.status(200).json({ message: "Authorized", status: 200 });
+    return res.status(200).json({ user, status: 200 });
+  },
+  async getUserData(req, res, next) {
+    const { userId } = verifyToken(req.signedCookies.userId);
+    const { name, email, username, role } = await User.findById(userId, [
+      "name",
+      "email",
+      "username",
+      "role",
+    ]);
+    console.log({ name, email, username, role });
+    return res.status(200).json({ name, email, username, role, status: 200 });
   },
 };
