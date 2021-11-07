@@ -43,6 +43,13 @@
 <script>
 export default {
   props: {
+    mode: {
+      type: String,
+      default: "edit",
+      validator(value) {
+        return ["edit", "new"].includes(value);
+      },
+    },
     id: {
       type: String,
       required: true,
@@ -68,7 +75,7 @@ export default {
       required: true,
     },
   },
-  emits: ["confirm-edits", "edits-failed"],
+  emits: ["form-success", "form-failed"],
   data() {
     return {
       formName: "",
@@ -124,9 +131,12 @@ export default {
       if (!formData) {
         return;
       }
-      const url = `${process.env.VUE_APP_API}/products/${this.id}`;
+      const url =
+        this.mode === "edit"
+          ? `${process.env.VUE_APP_API}/products/${this.id}`
+          : `${process.env.VUE_APP_API}/products`;
       const options = {
-        method: "PUT",
+        method: this.mode === "edit" ? "PUT" : "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
@@ -138,9 +148,9 @@ export default {
         .then((res) => res.json())
         .then((res) => {
           if (res.status === 200) {
-            this.$emit("confirm-edits", this.id, formData);
+            this.$emit("form-success", this.id || res._id, formData);
           } else {
-            this.$emit("edits-failed", res.message);
+            this.$emit("form-failed", res.message);
           }
         })
         .catch((error) => {

@@ -10,6 +10,7 @@ const router = Router();
 router.use(authorizeUser);
 
 router.get("/", tryCatch(controller.getProducts));
+router.post("/", tryCatch(controller.newProduct));
 router.put("/:productId", tryCatch(controller.editProduct));
 router.delete("/:productId", tryCatch(controller.deleteProduct));
 

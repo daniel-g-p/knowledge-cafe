@@ -11,6 +11,9 @@
         @select-event="showStats"
       ></event-item>
     </div>
+    <p v-if="!events.length">
+      Es wurden keine Events gefunden.
+    </p>
     <base-modal title="Statistiken" :open="infoOpen" @close-modal="closeInfo">
       <event-item-details
         :title="activeEvent.title"
@@ -53,7 +56,7 @@ export default {
     },
   },
   mounted() {
-    if (!this.events) {
+    if (!this.events.length) {
       this.$store.dispatch("events/fetchEvents");
     }
   },

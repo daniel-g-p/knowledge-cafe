@@ -14,8 +14,11 @@ export default {
     state.productList[index].price = price;
     state.productList[index].variations = variations;
   },
+  newProduct(state, product) {
+    state.productList.push(product);
+  },
   deleteProduct(state, productId) {
-    const index = state.productList.find(
+    const index = state.productList.findIndex(
       (product) => product._id === productId
     );
     state.productList.splice(index, 1);

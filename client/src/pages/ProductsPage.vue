@@ -1,6 +1,9 @@
 <template>
   <section>
     <base-title>Produkte</base-title>
+    <div class="products__commands">
+      <base-button @click="newProduct">Neues Produkt</base-button>
+    </div>
     <transition-group tag="div" name="products-" class="products">
       <products-item
         v-for="product in products"
@@ -10,6 +13,9 @@
         @select-item="selectItem"
       ></products-item>
     </transition-group>
+    <p v-if="!products.length" class="products__message">
+      Es wurden keine Produkte gefunden.
+    </p>
     <base-modal
       :open="viewMode ? true : false"
       :title="modalTitle"
@@ -25,15 +31,16 @@
         :stats="activeProduct.stats"
       ></products-item-details>
       <products-item-form
-        v-else-if="viewMode === 'edit'"
+        v-else-if="viewMode === 'edit' || viewMode === 'new'"
+        :mode="viewMode"
         :id="activeProduct.id"
         :name="activeProduct.name"
         :description="activeProduct.description"
         :price="activeProduct.price"
         :tag="activeProduct.tag"
         :variations="activeProduct.variations"
-        @confirm-edits="confirmEdits"
-        @edits-failed="emitError"
+        @form-success="confirmForm"
+        @form-failed="emitError"
       ></products-item-form>
       <products-item-delete
         v-else-if="viewMode === 'delete'"
@@ -93,10 +100,16 @@ export default {
         case "error": {
           return "Fehler";
         }
+        case "new": {
+          return "Neues Produkt";
+        }
       }
     },
   },
   methods: {
+    newProduct() {
+      this.viewMode = "new";
+    },
     selectItem(itemId, mode) {
       const item = this.products.find((product) => product._id === itemId);
       this.activeProduct.id = item._id;
@@ -120,9 +133,21 @@ export default {
         stats: {},
       };
     },
-    confirmEdits(productId, productData) {
+    confirmForm(productId, productData) {
+      const action = `products/${this.viewMode}Product`;
+      const payload = { productId, productData };
       this.closeModal();
-      this.$store.dispatch("products/editProduct", { productId, productData });
+      this.$store.dispatch(action, payload);
+      setTimeout(() => {
+        this.selectItem(productId, "view");
+      }, 500);
+    },
+    createProduct(productId, productData) {
+      this.closeModal();
+      this.$store.dispatch("products/createProduct", {
+        productId,
+        productData,
+      });
       setTimeout(() => {
         this.selectItem(productId, "view");
       }, 500);
@@ -139,7 +164,7 @@ export default {
     },
   },
   mounted() {
-    if (!this.products) {
+    if (!this.products.length) {
       this.$store.dispatch("products/fetchProducts");
     }
   },
@@ -159,6 +184,11 @@ export default {
   }
   &--leave-to {
     opacity: 0;
+  }
+  &__commands {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 0.125rem solid $color-grey-light;
   }
 }
 </style>

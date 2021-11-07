@@ -55,6 +55,9 @@ export default {
       return `€${multiple.slice(0, length - 2)},${multiple.slice(length - 2)}`;
     },
     formattedRevenue() {
+      if (!this.stats.revenue) {
+        return "€0,00";
+      }
       const multiple = (this.stats.revenue * 100).toString();
       const { length } = multiple;
       return `€${multiple.slice(0, length - 2)},${multiple.slice(length - 2)}`;
