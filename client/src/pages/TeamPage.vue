@@ -1,6 +1,9 @@
 <template>
   <section class="team">
     <base-title>Team</base-title>
+    <div class="team__nav">
+      <base-button @click="openNewMemberForm">Neues Mitglied</base-button>
+    </div>
     <transition-group tag="div" name="team__member-" class="team__list">
       <team-member
         v-for="member in teamMembers"
@@ -34,6 +37,14 @@
         :name="active.name"
         @form-success="closeModal"
       ></team-member-delete>
+      <team-member-new
+        v-else-if="viewMode === 'new'"
+        @form-success="closeModal"
+        @form-failed="emitError"
+      ></team-member-new>
+      <p class="team__error" v-else-if="viewMode === 'error'">
+        {{ modalError }}
+      </p>
     </base-modal>
   </section>
 </template>
@@ -43,6 +54,7 @@ import TeamMember from "../components/TeamMember.vue";
 import TeamMemberDetails from "../components/TeamMemberDetails.vue";
 import TeamMemberEdit from "../components/TeamMemberEdit.vue";
 import TeamMemberDelete from "../components/TeamMemberDelete.vue";
+import TeamMemberNew from "../components/TeamMemberNew.vue";
 
 export default {
   components: {
@@ -50,10 +62,12 @@ export default {
     TeamMemberDetails,
     TeamMemberEdit,
     TeamMemberDelete,
+    TeamMemberNew,
   },
   data() {
     return {
       viewMode: "",
+      modalError: "",
       active: {
         id: "",
         name: "",
@@ -77,7 +91,10 @@ export default {
           return "Status";
         }
         case "delete": {
-          return "Mitglied entfernen?";
+          return "Mitglied entfernen";
+        }
+        case "new": {
+          return "Neues Mitglied";
         }
         case "error": {
           return "Fehler";
@@ -98,6 +115,9 @@ export default {
       this.active.timestamp = teamMember.timestamp;
       this.viewMode = mode;
     },
+    openNewMemberForm() {
+      this.viewMode = "new";
+    },
     closeModal() {
       this.viewMode = "";
     },
@@ -106,6 +126,13 @@ export default {
       this.closeModal();
       setTimeout(() => {
         this.viewMode = "view";
+      }, 500);
+    },
+    emitError(message) {
+      this.viewMode = "";
+      this.modalError = message || "Ein Fehler ist aufgetreten.";
+      setTimeout(() => {
+        this.viewMode = "error";
       }, 500);
     },
   },
@@ -134,6 +161,14 @@ export default {
     &--leave-to {
       opacity: 0;
     }
+  }
+  &__nav {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 0.125rem solid $color-grey-light;
+  }
+  &__error {
+    line-height: 1.25;
   }
 }
 </style>

@@ -95,3 +95,20 @@ export const changePasswordSchema = (data) => {
     )
   );
 };
+
+export const newUserSchema = (user) => {
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  const data = {
+    email: user.email.toLowerCase().trim(),
+    role: user.role.toLowerCase() === "admin" ? "admin" : "user",
+  };
+  return validate(
+    data,
+    condition(data.email, "Bitte gebe eine Emailadresse ein."),
+    condition(
+      emailRegex.test(data.email),
+      "Bitte gebe eine gültige Emailadresse ein."
+    ),
+    condition(data.role, "Ungültiger Status.")
+  );
+};
