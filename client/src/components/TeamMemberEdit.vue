@@ -55,7 +55,7 @@ export default {
               this.$store.dispatch("team/updateRole", payload);
               this.$emit("form-success", this.formRole);
             } else {
-              this.$emit("form-failed");
+              this.$emit("form-failed", res.message);
             }
           })
           .catch((error) => {

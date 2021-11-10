@@ -1,7 +1,6 @@
 import database from "../database/access.js";
-import { validate, condition } from "./validation.js";
-import newProduct from "../models2/product.js";
-import product from "../models2/product.js";
+import { validate, condition } from "../utilities/validation.js";
+import newProduct from "../models/product.js";
 
 export default {
   async getAllShopItems() {

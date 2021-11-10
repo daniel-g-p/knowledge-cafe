@@ -1,13 +1,11 @@
 import Chance from "chance";
-
 import { connectToDatabase } from "./database/connect.js";
 import database from "./database/access.js";
-import { hash } from "./utilities2.js/passwords.js";
-
-import newProduct from "./models2/product.js";
-import newEvent from "./models2/event.js";
-import newOrder from "./models2/order.js";
-import newUser from "./models2/user.js";
+import { hash } from "./utilities/passwords.js";
+import newProduct from "./models/product.js";
+import newEvent from "./models/event.js";
+import newOrder from "./models/order.js";
+import newUser from "./models/user.js";
 
 const chance = new Chance();
 
@@ -155,6 +153,7 @@ const seedAdmin = async () => {
     name,
     username,
     password: passwordHash,
+    verified: true,
   });
   console.log("Admin seeded.");
   return admin;

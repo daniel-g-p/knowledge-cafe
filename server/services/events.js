@@ -1,6 +1,5 @@
 import database from "../database/access.js";
-import { condition, validate } from "./validation.js";
-import newEvent from "../models2/event.js";
+import newEvent from "../models/event.js";
 
 export default {
   async findActiveEvent() {

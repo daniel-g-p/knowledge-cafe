@@ -1,6 +1,6 @@
 import database from "../database/access.js";
-import { condition, validate } from "./validation.js";
-import { hash, verifyHash } from "../utilities2.js/passwords.js";
+import { condition, validate } from "../utilities/validation.js";
+import { hash, verifyHash } from "../utilities/passwords.js";
 
 export default {
   validateLogin(user, password) {
@@ -80,5 +80,9 @@ export default {
   async changePassword(userId, password) {
     const pwHash = await hash(password);
     return await database.updateById("users", userId, { password: pwHash });
+  },
+  async userIsAdmin(userId) {
+    const user = await database.findById("users", userId, ["role"]);
+    return user.role === "admin";
   },
 };

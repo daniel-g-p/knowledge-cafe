@@ -1,9 +1,5 @@
-import { newUserSchema } from "../utilities/validation.js";
-
 import teamService from "../services/team.js";
 import usersService from "../services/users.js";
-
-import User from "../models/User.js";
 
 export default {
   async getTeamMembers(req, res, next) {

@@ -1,7 +1,3 @@
-import Event from "../models/Event.js";
-import Order from "../models/Order.js";
-import Product from "../models/Product.js";
-
 import eventsService from "../services/events.js";
 import ordersService from "../services/orders.js";
 import productsService from "../services/products.js";

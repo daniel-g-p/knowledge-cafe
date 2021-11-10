@@ -31,12 +31,14 @@
         :id="active.id"
         :role="active.role"
         @form-success="updateRole"
+        @form-failed="emitError"
       ></team-member-edit>
       <team-member-delete
         v-else-if="viewMode === 'delete'"
         :id="active.id"
         :name="active.name"
         @form-success="closeModal"
+        @form-failed="emitError"
       ></team-member-delete>
       <team-member-new
         v-else-if="viewMode === 'new'"

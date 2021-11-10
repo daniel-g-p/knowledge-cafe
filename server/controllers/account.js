@@ -1,6 +1,6 @@
 import config from "../config/index.js";
-import { verifyHash } from "../utilities2.js/passwords.js";
-import { signJwtToken, verifyJwtToken } from "../utilities2.js/jwt.js";
+import { verifyHash } from "../utilities/passwords.js";
+import { signJwtToken, verifyJwtToken } from "../utilities/jwt.js";
 import usersService from "../services/users.js";
 
 export default {

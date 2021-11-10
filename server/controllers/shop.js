@@ -1,8 +1,3 @@
-import Order from "../models/Order.js";
-import Event from "../models/Event.js";
-
-import { orderSchema } from "../utilities/validation.js";
-
 import productsService from "../services/products.js";
 import ordersService from "../services/orders.js";
 import eventsService from "../services/events.js";
