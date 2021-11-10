@@ -15,12 +15,12 @@ export default {
   async placeOrder(req, res, next) {
     const { valid, message, data } = ordersService.validateOrder(req.body);
     if (!valid) {
-      return res.status(400).json({ ok: false, message });
+      return res.status(400).json({ message });
     }
     const activeEvent = await eventsService.findActiveEvent();
     if (!activeEvent) {
       const message = "Tut uns Leid, wir nehmen zurzeit keine Bestellungen an.";
-      return res.status(400).json({ ok: false, message });
+      return res.status(400).json({ message });
     }
     await ordersService.submitOrder(
       activeEvent._id.toString(),

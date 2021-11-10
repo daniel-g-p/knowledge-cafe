@@ -75,21 +75,22 @@ export default {
       const data = { user: this.user, password: this.password };
       const options = {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify(data),
       };
       this.buttonLoading = true;
       fetch(`${process.env.VUE_APP_API}/account/login`, options)
         .then((res) => res.json())
         .then((res) => {
-          if (res.status !== 200) {
-            this.openModal(res.message);
-          } else {
+          if (res.ok) {
             this.$store.dispatch("authentication/login");
             this.$router.push("/admin");
+            this.openModal(res.message);
+          } else {
+            this.openModal(res.message);
           }
         })
         .catch((error) => {

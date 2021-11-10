@@ -1,57 +1,57 @@
 import dotenv from "dotenv";
 import { hashPassword, verifyPassword } from "../utilities/encryption.js";
 import {
-  loginSchema,
   userEditsSchema,
   changePasswordSchema,
 } from "../utilities/validation.js";
 import User from "../models/User.js";
-import { signToken, verifyToken } from "../utilities/authentication.js";
+import { verifyToken } from "../utilities/authentication.js";
+
+import config from "../config/index.js";
+import { verifyHash } from "../utilities2.js/passwords.js";
+import { signJwtToken, verifyJwtToken } from "../utilities2.js/jwt.js";
+import usersService from "../services/users.js";
 
 dotenv.config();
 
 export default {
   async login(req, res, next) {
-    const { valid, message, data } = loginSchema(req.body);
+    const { user, password } = req.body;
+    const { valid, message, data } = usersService.validateLogin(user, password);
     if (!valid) {
       return res.status(400).json({ message });
     }
-    const user = await User.findByUser(data.user);
-    if (!user) {
-      const message =
-        "Den Benutzer scheint es nicht zu geben, bitte überprüfe deine Eingabe.";
-      return res.status(404).json({ message });
+    const theUser = await usersService.findUserByLogin(data.user);
+    if (!theUser) {
+      const message = "Den Benutzer scheint es nicht zu geben.";
+      return res.status(400).json({ message });
     }
-    const validPassword = await verifyPassword(user.password, data.password);
+    const validPassword = await verifyHash(theUser.password, data.password);
     if (!validPassword) {
-      const message =
-        "Benutzername und Passwort stimmen nicht überein, bitte überprüfe deine Eingabe.";
-      return res.status(401).json({ message });
+      const message = "Benutzername und Passwort stimmen nicht überein.";
+      return res.status(400).json({ message });
     }
-    const secureEnvironment = process.env.NODE_ENV !== "development";
-    const userId = user._id.toString();
+    const jwtToken = signJwtToken(theUser._id.toString());
     const cookieOptions = {
       maxAge: 1000 * 60 * 60 * 24,
       signed: true,
       httpOnly: true,
-      secure: secureEnvironment,
+      secure: config.nodeEnv !== "development",
     };
     return res
       .status(200)
-      .cookie("userId", signToken(userId), cookieOptions)
-      .json({ status: 200 });
+      .cookie("userId", jwtToken, cookieOptions)
+      .json({ ok: true });
   },
   async verifyLogin(req, res, next) {
-    const { userId } = verifyToken(req.signedCookies.userId);
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized", status: 401 });
+    const { tokenData } = verifyJwtToken(req.signedCookies.userId);
+    if (!tokenData) {
+      return res.status(401).json({ message: "Kein Zugriff." });
     }
-    const user = await User.findById(userId);
+    const user = await usersService.findUserById(tokenData);
     if (!user) {
-      return res
-        .status(401)
-        .clearCookie("userId")
-        .json({ message: "Unauthorized", status: 401 });
+      const message = "Kein Zugriff.";
+      return res.status(401).clearCookie("userId").json({ message });
     }
     return res.status(200).json({ user, status: 200 });
   },
