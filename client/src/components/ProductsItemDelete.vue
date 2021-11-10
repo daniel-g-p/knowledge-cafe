@@ -35,7 +35,7 @@ export default {
       fetch(url, options)
         .then((res) => res.json())
         .then((res) => {
-          if (res.status === 200) {
+          if (res.ok) {
             this.$emit("confirm-deletion", this.id);
           } else {
             this.$emit("deletion-failed", res.message);

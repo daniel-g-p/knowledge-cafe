@@ -64,7 +64,10 @@ export default {
       const message = `Der Benutzername "${data.username}"" ist bereits vergeben.`;
       return res.status(400).json({ message });
     }
-    const emailAvailable = await usersService.emailAvailable();
+    const emailAvailable = await usersService.emailAvailable(
+      data.email,
+      tokenData
+    );
     if (!emailAvailable) {
       const message = `Es gibt bereits einen anderen Benutzer mit dieser Emailadresse.`;
       return res.status(400).json({ message });

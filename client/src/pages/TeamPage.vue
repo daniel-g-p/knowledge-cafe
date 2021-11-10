@@ -13,6 +13,7 @@
         @select-member="selectTeamMember"
       ></team-member>
     </transition-group>
+    <p v-if="!teamMembers.length">Es wurden keine Teammitglieder gefunden</p>
     <base-modal
       :open="viewMode ? true : false"
       :title="modalTitle"

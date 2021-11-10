@@ -34,7 +34,6 @@ export default {
       return res.status(200).json({ ok: true });
     }
     const hasPendingOrders = ordersService.checkForPendingOrders(orders);
-    console.log(hasPendingOrders);
     if (hasPendingOrders) {
       const message = "Es gibt noch offene Bestellungen.";
       return res.status(400).json({ message });

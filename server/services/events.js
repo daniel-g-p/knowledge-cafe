@@ -8,7 +8,7 @@ export default {
     return events[0];
   },
   async getAllEvents() {
-    return await database.find("events", {}, [], { start: -1 });
+    return await database.find("events", { end: { $ne: null } }, [], { start: -1 });
   },
   async createNewEvent() {
     return await database.create("events", newEvent());

@@ -1,12 +1,13 @@
 import Chance from "chance";
 
-import { connectToDatabase } from "./utilities/database.js";
-import { hashPassword } from "./utilities/encryption.js";
+import { connectToDatabase } from "./database/connect.js";
+import database from "./database/access.js";
+import { hash } from "./utilities2.js/passwords.js";
 
-import Product from "./models/Product.js";
-import Event from "./models/Event.js";
-import Order from "./models/Order.js";
-import User from "./models/User.js";
+import newProduct from "./models2/product.js";
+import newEvent from "./models2/event.js";
+import newOrder from "./models2/order.js";
+import newUser from "./models2/user.js";
 
 const chance = new Chance();
 
@@ -70,17 +71,17 @@ const adminData = {
 };
 
 const seedProducts = async (productData) => {
-  await Product.deleteAll();
+  await database.delete("products", {});
   const products = [];
   for (let item of productData) {
-    const product = new Product(
+    const product = newProduct(
       item.name,
       item.tag,
       item.price,
       item.description,
       item.variations
     );
-    await product.create();
+    await database.create("products", product);
     products.push(product);
   }
   console.log("Products seeded");
@@ -88,19 +89,18 @@ const seedProducts = async (productData) => {
 };
 
 const seedEvents = async (numberOfEvents) => {
-  await Event.deleteAll();
+  await database.delete("events", {});
   const events = [];
   for (let i = 0; i < numberOfEvents; i++) {
-    const event = new Event(`Testevent ${i + 1}`);
-    await event.create();
+    const event = newEvent();
+    await database.create("events", event);
     events.push(event);
   }
-  console.log("Events seeded.");
   return events;
 };
 
 const seedOrders = async (products, events, ordersPerEvent) => {
-  await Order.deleteAll();
+  await database.delete("orders", {});
   const orders = [];
   for (let event of events) {
     for (let i = 0; i < ordersPerEvent; i++) {
@@ -123,7 +123,7 @@ const seedOrders = async (products, events, ordersPerEvent) => {
         };
         items.push(item);
       }
-      const order = new Order(
+      const order = newOrder(
         event._id.toString(),
         chance.first(),
         chance.bool() ? "Lorem ipsum dolor sit amet" : "",
@@ -133,8 +133,8 @@ const seedOrders = async (products, events, ordersPerEvent) => {
           return result + item.price * item.quantity;
         }, 0)
       );
-      const { insertedId } = await order.create();
-      await Order.completeById(insertedId.toString());
+      const { insertedId } = await database.create("orders", order);
+      await database.updateById("orders", insertedId, { completed: true });
     }
   }
   console.log("Orders seeded.");
@@ -142,33 +142,42 @@ const seedOrders = async (products, events, ordersPerEvent) => {
 };
 
 const seedAdmin = async () => {
-  await User.deleteAll();
+  await database.delete("users", {});
   const { name, username, email, password } = adminData;
   let token = "";
   for (let i = 0; i < 6; i++) {
     token = `${token}${chance.integer({ min: 0, max: 9 })}`;
   }
-  const admin = new User(email, token, "admin");
-  const { insertedId } = await admin.create();
-  const hash = await hashPassword("admin");
-  await User.verify(insertedId.toString(), name, username, hash);
+  const admin = newUser(email, "admin", token);
+  const { insertedId } = await database.create("users", admin);
+  const passwordHash = await hash(password);
+  await database.updateById("users", insertedId, {
+    name,
+    username,
+    password: passwordHash,
+  });
   console.log("Admin seeded.");
   return admin;
 };
 
 const seedUsers = async (userNames) => {
   for (let name of userNames) {
-    const email = `${name}@knowledgecafe.de`;
+    const email = `${name.toLowerCase()}@knowledgecafe.de`;
     let token = "";
     for (let i = 0; i < 6; i++) {
       token = `${token}${chance.integer({ min: 0, max: 9 })}`;
     }
-    const user = await new User(email, token).create();
-    const userId = user.insertedId.toString();
+    const user = newUser(email, "user", token);
+    const { insertedId } = await database.create("users", user);
     const username = name.toLowerCase();
     const password = `${name}.2021`;
-    const hash = await hashPassword(password);
-    await User.verify(userId, name, username, hash);
+    const passwordHash = await hash(password);
+    await database.updateById("users", insertedId, {
+      name,
+      username,
+      password: passwordHash,
+      verified: true,
+    });
   }
   console.log("Users seeded.");
 };

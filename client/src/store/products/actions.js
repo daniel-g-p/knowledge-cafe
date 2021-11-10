@@ -3,7 +3,7 @@ export default {
     fetch(`${process.env.VUE_APP_API}/products`, { credentials: "include" })
       .then((res) => res.json())
       .then((res) => {
-        if (res.status === 200) {
+        if (res.ok) {
           context.commit("fetchProducts", res.products);
         }
       })

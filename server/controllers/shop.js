@@ -9,7 +9,7 @@ import eventsService from "../services/events.js";
 
 export default {
   async getShopItems(req, res, next) {
-    const products = await productsService.getAllProducts();
+    const products = await productsService.getAllShopItems();
     return res.json({ ok: true, products });
   },
   async placeOrder(req, res, next) {

@@ -1,39 +1,38 @@
 import { newUserSchema } from "../utilities/validation.js";
 
+import teamService from "../services/team.js";
+import usersService from "../services/users.js";
+
 import User from "../models/User.js";
 
 export default {
   async getTeamMembers(req, res, next) {
-    const fields = ["name", "username", "email", "role", "timestamp"];
-    const team = await User.findVerified(fields);
-    return res.status(200).json({ team, ok: true });
+    const team = await teamService.getAllTeamMembers();
+    return res.status(200).json({ ok: true, team });
   },
   async setRole(req, res, next) {
     const { userId } = req.params;
     const { role } = req.body;
-    await User.updateById(userId, { role });
+    await teamService.setRole(userId, role);
     return res.status(200).json({ ok: true });
   },
   async deleteMember(req, res, next) {
     const { userId } = req.params;
-    await User.deleteById(userId);
+    await teamService.deleteMember(userId);
     return res.status(200).json({ ok: true });
   },
   async newUser(req, res, next) {
-    const { valid, data, message } = newUserSchema(req.body);
+    const { valid, data, message } = teamService.validateNewMember(req.body);
     if (!valid) {
-      return res.status(400).json({ ok: false, message });
+      return res.status(400).json({ message });
     }
-    const existingUser = await User.findByUser(data.email);
-    if (existingUser) {
+    const emailAvailable = await usersService.emailAvailable(data.email, "");
+    console.log(emailAvailable);
+    if (!emailAvailable) {
       const message = "Es gibt bereits einen Benutzer mit dieser Emailadresse.";
-      return res.status(400).json({ ok: false, message });
+      return res.status(400).json({ message });
     }
-    let token = "";
-    for (let i = 0; i < 6; i++) {
-      token = `${token}${Math.floor(Math.random() * 10)}`;
-    }
-    await new User(data.email, token, data.role).create();
+    await teamService.createNewMember(data.email, data.role);
     return res.status(200).json({ ok: true });
   },
 };
