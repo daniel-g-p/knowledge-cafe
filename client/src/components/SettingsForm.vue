@@ -106,7 +106,7 @@ export default {
       fetch(url, options)
         .then((res) => res.json())
         .then((res) => {
-          if (res.status === 200) {
+          if (res.ok) {
             this.$emit("form-success");
             this.$store.dispatch("authentication/updateUserData", data);
           } else {

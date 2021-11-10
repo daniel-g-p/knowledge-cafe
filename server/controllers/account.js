@@ -1,18 +1,7 @@
-import dotenv from "dotenv";
-import { hashPassword, verifyPassword } from "../utilities/encryption.js";
-import {
-  userEditsSchema,
-  changePasswordSchema,
-} from "../utilities/validation.js";
-import User from "../models/User.js";
-import { verifyToken } from "../utilities/authentication.js";
-
 import config from "../config/index.js";
 import { verifyHash } from "../utilities2.js/passwords.js";
 import { signJwtToken, verifyJwtToken } from "../utilities2.js/jwt.js";
 import usersService from "../services/users.js";
-
-dotenv.config();
 
 export default {
   async login(req, res, next) {
@@ -62,45 +51,43 @@ export default {
     return res.status(200).json({ ok: true, name, email, username, role });
   },
   async editUser(req, res, next) {
-    const { userId } = verifyToken(req.signedCookies.userId);
-    const { data, valid, message } = userEditsSchema(req.body);
+    const { data, valid, message } = usersService.validateEdits(req.body);
     if (!valid) {
       return res.status(400).json({ message, status: 400 });
     }
-    const existingUsername = await User.findByUser(data.username);
-    if (existingUsername && existingUsername._id.toString() !== userId) {
-      return res.status(400).json({
-        message: `Der Benutzername "${data.username}"" ist bereits vergeben.`,
-        status: 400,
-      });
+    const { tokenData } = verifyJwtToken(req.signedCookies.userId);
+    const usernameAvailable = await usersService.usernameAvailable(
+      data.username,
+      tokenData
+    );
+    if (!usernameAvailable) {
+      const message = `Der Benutzername "${data.username}"" ist bereits vergeben.`;
+      return res.status(400).json({ message });
     }
-    const existingEmail = await User.findByUser(data.email);
-    if (existingEmail && existingEmail._id.toString() !== userId) {
-      return res.status(400).json({
-        message: `Es gibt bereits einen anderen Benutzer mit dieser Emailadresse.`,
-        status: 400,
-      });
+    const emailAvailable = await usersService.emailAvailable();
+    if (!emailAvailable) {
+      const message = `Es gibt bereits einen anderen Benutzer mit dieser Emailadresse.`;
+      return res.status(400).json({ message });
     }
-    await User.updateById(userId, data);
-    return res.status(200).json({ status: 200 });
+    await usersService.editUser(tokenData, data);
+    return res.status(200).json({ ok: true });
   },
   async changePassword(req, res, next) {
-    const { userId } = verifyToken(req.signedCookies.userId);
-    const { valid, data, message } = changePasswordSchema(req.body);
+    const validation = usersService.validatePasswordEdit(req.body);
+    const { valid, data, message } = validation;
     if (!valid) {
       return res.status(400).json({ message });
     }
-    const user = await User.findById(userId, ["password"]);
-    const correctPassword = await verifyPassword(
-      user.password,
+    const { tokenData } = verifyJwtToken(req.signedCookies.userId);
+    const correctPassword = await usersService.passwordIsCorrect(
+      tokenData,
       data.oldPassword
     );
     if (!correctPassword) {
       const message = "Das eingegebene Passwort ist falsch.";
-      return res.status(401).json({ message, ok: false });
+      return res.status(401).json({ message });
     }
-    const hash = await hashPassword(data.newPassword);
-    await User.updateById(userId, { password: hash });
+    await usersService.changePassword(tokenData, data.newPassword);
     return res.status(200).clearCookie("userId").json({ ok: true });
   },
   logout(req, res, next) {
