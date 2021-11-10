@@ -13,7 +13,7 @@ router.get("/user", tryCatch(authorizeUser), tryCatch(controller.getUserData));
 router.put("/user", tryCatch(controller.editUser));
 router.post(
   "/change-password",
-  authorizeUser,
+  tryCatch(authorizeUser),
   tryCatch(controller.changePassword)
 );
 router.get("/logout", tryCatch(controller.logout));

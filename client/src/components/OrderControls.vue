@@ -91,10 +91,7 @@ export default {
       const url = `${process.env.VUE_APP_API}/events/${
         this.eventActive ? "close" : "open"
       }`;
-      const options = {
-        method: "POST",
-        credentials: "include",
-      };
+      const options = { method: "POST", credentials: "include" };
       if (this.eventActive) {
         options.headers = { "Content-Type": "application/json" };
         options.body = JSON.stringify({ eventName: this.eventName });
@@ -105,12 +102,9 @@ export default {
         .then((res) => {
           this.toggleModal();
           this.buttonLoading = false;
-          if (res.status === 200) {
+          if (res.ok) {
             if (this.eventActive) {
               this.$emit("event-success", res.eventId);
-            }
-            if (this.eventActive) {
-              this.$store.dispatch("events/fetchEvents", this.eventActive);
             }
             this.$store.dispatch("orders/toggleEventStatus", this.eventActive);
           } else {

@@ -105,10 +105,10 @@ export default {
       fetch(url, options)
         .then((res) => res.json())
         .then((res) => {
-          if (res.status !== 200) {
-            this.$emit("completion-failed");
-          } else {
+          if (res.ok) {
             this.$store.dispatch("orders/completeOrder", this.id);
+          } else {
+            this.$emit("completion-failed");
           }
         })
         .catch((error) => {

@@ -28,4 +28,19 @@ export default {
     );
     return await database.create("orders", order);
   },
+  async getPendingOrders(eventId) {
+    return await database.find("orders", { eventId, completed: false });
+  },
+  async completeOrder(orderId) {
+    return await database.updateById("orders", orderId, { completed: true });
+  },
+  async cancelOrder(orderId) {
+    return await database.deleteById("orders", orderId);
+  },
+  async getEventOrders(eventId) {
+    return await database.find("orders", { eventId });
+  },
+  checkForPendingOrders(orders) {
+    return orders.some((order) => !order.completed)
+  }
 };

@@ -1,29 +1,23 @@
-import Event from "../models/Event.js";
-import Order from "../models/Order.js";
+import eventsService from "../services/events.js";
+import ordersService from "../services/orders.js";
 
 export default {
   async getPendingOrders(req, res, next) {
-    const event = await Event.findActive();
+    const event = await eventsService.findActiveEvent();
     if (!event) {
-      return res.status(200).json({ event: false, status: 200 });
+      return res.status(200).json({ ok: true });
     }
-    const orders = await Order.getPending(event._id.toString());
-    return res.status(200).json({ orders, event: true });
+    const orders = await ordersService.getPendingOrders(event._id.toString());
+    return res.status(200).json({ ok: true, orders, event: true });
   },
   async completeOrder(req, res, next) {
     const { orderId } = req.params;
-    const order = await Order.completeById(orderId);
-    if (!order.acknowledged) {
-      return res.status(400).json({
-        message: "Die Bestellung konnte nicht abgeschlossen werden.",
-        status: 400,
-      });
-    }
-    return res.status(200).json({ status: 200 });
+    await ordersService.completeOrder(orderId);
+    return res.status(200).json({ ok: true });
   },
   async cancelOrder(req, res, next) {
     const { orderId } = req.params;
-    await Order.deleteById(orderId);
-    return res.status(200).json({ status: 200 });
+    await ordersService.cancelOrder(orderId);
+    return res.status(200).json({ ok: true });
   },
 };

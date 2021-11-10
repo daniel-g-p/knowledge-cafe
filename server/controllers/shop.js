@@ -29,7 +29,7 @@ export default {
       data.items,
       data.paymentMethod
     );
-    const responseMessage = `Wir haben deine Bestellung erhalten, ${name}. Wir rufen dich, sobald dein Kaffee bereit ist, vielen Dank!`;
+    const responseMessage = `Wir haben deine Bestellung erhalten, ${data.name}. Wir rufen dich, sobald dein Kaffee bereit ist, vielen Dank!`;
     return res.json({ ok: true, message: responseMessage });
   },
 };
