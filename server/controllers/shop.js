@@ -1,48 +1,35 @@
-import Product from "../models/Product.js";
 import Order from "../models/Order.js";
 import Event from "../models/Event.js";
 
 import { orderSchema } from "../utilities/validation.js";
 
+import productsService from "../services/products.js";
+import ordersService from "../services/orders.js";
+import eventsService from "../services/events.js";
+
 export default {
   async getShopItems(req, res, next) {
-    const keys = ["name", "price", "variations"];
-    const products = await Product.getAll(keys);
-    return res.json({ products });
+    const products = await productsService.getAllProducts();
+    return res.json({ ok: true, products });
   },
   async placeOrder(req, res, next) {
-    const { valid, message, data } = orderSchema(req.body);
+    const { valid, message, data } = ordersService.validateOrder(req.body);
     if (!valid) {
-      return res.status(400).json({ message, status: 400 });
+      return res.status(400).json({ ok: false, message });
     }
-    const event = await Event.findActive();
-    if (!event) {
-      return res.status(400).json({
-        message:
-          "Tut uns Leid, leider haben wir gerade keinen Verkauf am laufen.",
-        status: 400,
-      });
+    const activeEvent = await eventsService.findActiveEvent();
+    if (!activeEvent) {
+      const message = "Tut uns Leid, wir nehmen zurzeit keine Bestellungen an.";
+      return res.status(400).json({ ok: false, message });
     }
-    const order = await new Order(
-      event._id.toString(),
+    await ordersService.submitOrder(
+      activeEvent._id.toString(),
       data.name,
       data.comments,
       data.items,
-      data.paymentMethod,
-      data.items.reduce((result, item) => {
-        return result + item.price * item.quantity;
-      }, 0)
-    ).create();
-    if (!order.acknowledged) {
-      return res.status(400).json({
-        message:
-          "Tut uns Leid, wir konnten deine Bestellung leider nicht aufnehmen.",
-        status: 400,
-      });
-    }
-    return res.json({
-      message: `Wir haben deine Bestellung erhalten, ${data.name}. Wir rufen dich, sobald dein Kaffee bereit ist, vielen Dank!`,
-      status: 200,
-    });
+      data.paymentMethod
+    );
+    const responseMessage = `Wir haben deine Bestellung erhalten, ${name}. Wir rufen dich, sobald dein Kaffee bereit ist, vielen Dank!`;
+    return res.json({ ok: true, message: responseMessage });
   },
 };

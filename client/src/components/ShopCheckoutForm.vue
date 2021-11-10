@@ -94,12 +94,12 @@ export default {
       fetch(`${process.env.VUE_APP_API}/shop`, requestOptions)
         .then((res) => res.json())
         .then((res) => {
-          if (res.status !== 200) {
+          if (res.ok) {
+            this.$emit("confirm-order", res.message);
+          } else {
             this.modal.title = "Fehler";
             this.modal.text = res.message;
             this.modal.open = true;
-          } else {
-            this.$emit("confirm-order", res.message);
           }
         })
         .catch((error) => {

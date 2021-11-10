@@ -24,6 +24,3 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendEmail = (fromName, fromEmail, toName, toEmail, subjectLine, message) {
-  
-};

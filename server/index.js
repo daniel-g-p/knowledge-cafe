@@ -1,10 +1,12 @@
-import dotenv from "dotenv";
 import express from "express";
+import compression from "compression";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import { connectToDatabase } from "./utilities/database.js";
-import { errorHandler } from "./utilities/error-handling.js";
+import config from "./config/index.js";
+
+import { connectToDatabase } from "./database/connect.js";
+import { errorHandler } from "./middleware/errors.js";
 
 import shopRouter from "./routes/shop.js";
 import accountRouter from "./routes/account.js";
@@ -13,13 +15,12 @@ import eventsRouter from "./routes/events.js";
 import productsRouter from "./routes/products.js";
 import teamRouter from "./routes/team.js";
 
-dotenv.config();
-
 const app = express();
 
+app.use(compression());
 app.use(cors({ origin: true, credentials: true }));
+app.use(cookieParser(config.cookieSecret));
 app.use(express.json());
-app.use(cookieParser(process.env.COOKIE_PARSER_SECRET));
 
 app.use("/shop", shopRouter);
 app.use("/account", accountRouter);
@@ -31,18 +32,15 @@ app.use("/team", teamRouter);
 app.use(errorHandler);
 
 const startServer = async () => {
-  const port = process.env.PORT || 3000;
-  const devEnv = process.env.NODE_ENV === "development";
-  const server = `http://localhost:${port}`;
   try {
     await connectToDatabase();
-    app.listen(port, () => {
-      if (devEnv) {
-        console.log(`Serving on ${server}`);
+    app.listen(config.port, () => {
+      if (config.nodeEnv === "development") {
+        console.log(`Serving on http://localhost:${config.port}`);
       }
     });
   } catch (error) {
-    if (devEnv) {
+    if (config.nodeEnv === "development") {
       console.log(error);
     }
   }

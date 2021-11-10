@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { tryCatch } from "../utilities/error-handling.js";
+import { tryCatch } from "../middleware/errors.js";
 
 import controller from "../controllers/shop.js";
 
