@@ -19,7 +19,12 @@ export default {
     const users = await database.find("users", query, ["_id", "password"]);
     return users[0];
   },
-  async findUserById(id) {
-    return database.findById("users", id);
+  async userExists(id) {
+    const user = await database.findById("users", id, ["_id"]);
+    return user ? true : false;
+  },
+  async getUserData(id) {
+    const fields = ["name", "email", "username", "role"];
+    return await database.findById("users", id, fields);
   },
 };

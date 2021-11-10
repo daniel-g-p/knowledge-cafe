@@ -6,10 +6,8 @@ export default {
     fetch(`${process.env.VUE_APP_API}/account/user`, { credentials: "include" })
       .then((res) => res.json())
       .then((res) => {
-        if (res.status === 200) {
+        if (res.ok) {
           context.commit("fetchUserData", res);
-        } else {
-          console.log(res.message);
         }
       })
       .catch((error) => {

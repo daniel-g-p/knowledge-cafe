@@ -11,15 +11,15 @@ export default {
   redirect: "/admin/bestellungen",
   component: AdminPage,
   beforeEnter(to, from, next) {
-    fetch(`${process.env.VUE_APP_API}/account/login`, {
-      credentials: "include",
-    })
+    const url = `${process.env.VUE_APP_API}/account/login`;
+    const options = { credentials: "include" };
+    fetch(url, options)
       .then((res) => res.json())
       .then((res) => {
-        if (res.status !== 200) {
-          next({ name: "login" });
-        } else {
+        if (res.ok) {
           next();
+        } else {
+          next({ name: "login" });
         }
       })
       .catch((error) => {

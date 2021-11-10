@@ -8,9 +8,9 @@ export default {
     return {
       loggedIn: false,
       isAdmin: false,
-      name: "",
-      email: "",
-      username: "",
+      name: "N/A",
+      email: "N/A",
+      username: "N/A",
     };
   },
   getters,

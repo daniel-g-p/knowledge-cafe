@@ -48,22 +48,18 @@ export default {
     if (!tokenData) {
       return res.status(401).json({ message: "Kein Zugriff." });
     }
-    const user = await usersService.findUserById(tokenData);
+    const user = await usersService.getUserData(tokenData);
     if (!user) {
       const message = "Kein Zugriff.";
       return res.status(401).clearCookie("userId").json({ message });
     }
-    return res.status(200).json({ user, status: 200 });
+    return res.status(200).json({ ok: true, user });
   },
   async getUserData(req, res, next) {
-    const { userId } = verifyToken(req.signedCookies.userId);
-    const { name, email, username, role } = await User.findById(userId, [
-      "name",
-      "email",
-      "username",
-      "role",
-    ]);
-    return res.status(200).json({ name, email, username, role, status: 200 });
+    const { tokenData } = verifyJwtToken(req.signedCookies.userId);
+    const user = await usersService.getUserData(tokenData);
+    const { name, email, username, role } = user;
+    return res.status(200).json({ ok: true, name, email, username, role });
   },
   async editUser(req, res, next) {
     const { userId } = verifyToken(req.signedCookies.userId);

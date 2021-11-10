@@ -94,7 +94,7 @@ export default {
   },
   mounted() {
     const { name, email, username } = this.userData;
-    if (!name || !email || !username) {
+    if (name === "N/A" || !email === "N/A" || !username === "N/A") {
       this.$store.dispatch("authentication/fetchUserData");
     }
   },

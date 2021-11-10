@@ -88,7 +88,6 @@ export default {
           if (res.ok) {
             this.$store.dispatch("authentication/login");
             this.$router.push("/admin");
-            this.openModal(res.message);
           } else {
             this.openModal(res.message);
           }

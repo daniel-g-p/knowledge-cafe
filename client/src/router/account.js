@@ -20,10 +20,10 @@ export default {
         })
           .then((res) => res.json())
           .then((res) => {
-            if (res.status !== 200) {
-              next();
-            } else {
+            if (res.ok) {
               next({ name: "orders" });
+            } else {
+              next();
             }
           })
           .catch((error) => {
