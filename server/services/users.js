@@ -51,7 +51,6 @@ export default {
   },
   async emailAvailable(email, userId) {
     const users = await database.find("users", { email }, ["_id"]);
-    console.log(users);
     return !users.length || users[0]._id.toString() === userId;
   },
   async editUser(userId, edits) {

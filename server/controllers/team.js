@@ -23,7 +23,6 @@ export default {
       return res.status(400).json({ message });
     }
     const emailAvailable = await usersService.emailAvailable(data.email, "");
-    console.log(emailAvailable);
     if (!emailAvailable) {
       const message = "Es gibt bereits einen Benutzer mit dieser Emailadresse.";
       return res.status(400).json({ message });

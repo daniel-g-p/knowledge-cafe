@@ -3,7 +3,6 @@ import productsService from "../services/products.js";
 export default {
   async newProduct(req, res, next) {
     const { data, valid, message } = productsService.validateProduct(req.body);
-    console.log(data, valid, message);
     if (!valid) {
       return res.status(400).json({ message });
     }
@@ -15,7 +14,6 @@ export default {
       data.variations
     );
     const { insertedId } = product;
-    console.log(insertedId);
     return res.status(200).json({ ok: true, _id: insertedId.toString() });
   },
   async getProducts(req, res, next) {
