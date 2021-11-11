@@ -1,4 +1,5 @@
 import database from "../database/access.js";
+
 import newEvent from "../models/event.js";
 
 export default {

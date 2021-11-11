@@ -1,7 +1,10 @@
 import Chance from "chance";
+
 import { connectToDatabase } from "./database/connect.js";
 import database from "./database/access.js";
+
 import { hash } from "./utilities/passwords.js";
+
 import newProduct from "./models/product.js";
 import newEvent from "./models/event.js";
 import newOrder from "./models/order.js";

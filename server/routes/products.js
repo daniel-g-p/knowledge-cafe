@@ -7,7 +7,7 @@ import controller from "../controllers/products.js";
 
 const router = Router();
 
-router.use(tryCatch(authorizeUser));
+router.use(authorizeUser);
 
 router.get("/", tryCatch(controller.getProducts));
 router.post("/", tryCatch(controller.newProduct));

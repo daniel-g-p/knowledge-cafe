@@ -1,5 +1,7 @@
 import database from "../database/access.js";
+
 import { validate, condition } from "../utilities/validation.js";
+
 import newProduct from "../models/product.js";
 
 export default {
@@ -60,7 +62,7 @@ export default {
           const data = await database.findById("products", itemId, fields);
           const { price, stats } = data;
           const { revenue, unitsSold, variations } = stats;
-          const newProduct = {
+          const product = {
             id: itemId,
             price,
             revenue: revenue + item.quantity * price,
@@ -68,9 +70,13 @@ export default {
             variations,
           };
           if (item.variation) {
-            newProduct.variations[item.variation] += item.quantity;
+            if (product.variations[item.variation]) {
+              product.variations[item.variation] += item.quantity;
+            } else {
+              product.variations[item.variation] = 0 + item.quantity;
+            }
           }
-          products.push(newProduct);
+          products.push(product);
         }
       }
     }

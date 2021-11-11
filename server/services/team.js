@@ -1,5 +1,7 @@
 import database from "../database/access.js";
+
 import { validate, condition } from "../utilities/validation.js";
+
 import newUser from "../models/user.js";
 
 export default {

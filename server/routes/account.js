@@ -1,19 +1,19 @@
 import { Router } from "express";
 
 import { tryCatch } from "../middleware/errors.js";
+import { authorizeUser } from "../middleware/authorization.js";
 
 import controller from "../controllers/account.js";
-import { authorizeUser, authorizeAdmin } from "../middleware/authorization.js";
 
 const router = Router();
 
 router.get("/login", tryCatch(controller.verifyLogin));
 router.post("/login", tryCatch(controller.login));
-router.get("/user", tryCatch(authorizeUser), tryCatch(controller.getUserData));
-router.put("/user", tryCatch(authorizeUser), tryCatch(controller.editUser));
+router.get("/user", authorizeUser, tryCatch(controller.getUserData));
+router.put("/user", authorizeUser, tryCatch(controller.editUser));
 router.post(
   "/change-password",
-  tryCatch(authorizeUser),
+  authorizeUser,
   tryCatch(controller.changePassword)
 );
 router.get("/logout", tryCatch(controller.logout));

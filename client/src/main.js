@@ -1,18 +1,44 @@
-import { createApp } from "vue";
+import { createApp, defineAsyncComponent } from "vue";
 import App from "./App.vue";
 
 import router from "./router/index.js";
 import store from "./store/index.js";
 
-import IconLogo from "./layout/IconLogo.vue";
-import BaseButton from "./base/BaseButton.vue";
-import BaseTitle from "./base/BaseTitle.vue";
-import BaseCard from "./base/BaseCard.vue";
-import BaseModal from "./base/BaseModal.vue";
-import BaseSelect from "./base/BaseSelect.vue";
-import BaseTextbox from "./base/BaseTextbox.vue";
-import BaseLink from "./base/BaseLink.vue";
-import BaseInfo from "./base/BaseInfo.vue";
+const IconLogo = defineAsyncComponent(() => {
+  return import("./layout/IconLogo.vue");
+});
+
+const BaseModal = defineAsyncComponent(() => {
+  return import("./base/BaseModal.vue");
+});
+
+const BaseSelect = defineAsyncComponent(() => {
+  return import("./base/BaseSelect.vue");
+});
+
+const BaseButton = defineAsyncComponent(() => {
+  return import("./base/BaseButton.vue");
+});
+
+const BaseTitle = defineAsyncComponent(() => {
+  return import("./base/BaseTitle.vue");
+});
+
+const BaseCard = defineAsyncComponent(() => {
+  return import("./base/BaseCard.vue");
+});
+
+const BaseTextbox = defineAsyncComponent(() => {
+  return import("./base/BaseTextbox.vue");
+});
+
+const BaseLink = defineAsyncComponent(() => {
+  return import("./base/BaseLink.vue");
+});
+
+const BaseInfo = defineAsyncComponent(() => {
+  return import("./base/BaseInfo.vue");
+});
 
 const app = createApp(App);
 
