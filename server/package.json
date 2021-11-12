@@ -8,7 +8,7 @@
     "node": "16.7.0"
   },
   "scripts": {
-    "serve": "nodemon index.js",
+    "start": "nodemon index.js",
     "seed": "node seed.js"
   },
   "keywords": [],

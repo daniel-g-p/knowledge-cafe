@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start-client": "npm run serve --prefix client",
-    "start-server": "npm run serve --prefix server",
+    "start-server": "npm run start --prefix server",
     "start": "run-p start-client start-server"
   },
   "keywords": [],
