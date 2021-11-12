@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import config from "./config/index.js";
 
 import { connectToDatabase } from "./database/connect.js";
-import { errorHandler } from "./middleware/errors.js";
+import { errorHandler, catchAllRoute } from "./middleware/errors.js";
 
 import shopRouter from "./routes/shop.js";
 import accountRouter from "./routes/account.js";
@@ -30,6 +30,7 @@ app.use("/products", productsRouter);
 app.use("/team", teamRouter);
 
 app.use(errorHandler);
+app.use(catchAllRoute);
 
 const startServer = async () => {
   try {
